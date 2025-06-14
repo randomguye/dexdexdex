@@ -31,44 +31,59 @@ local function initAfterMain()
 	Notebook = Apps.Notebook
 end
 
+local executorName = "Unknown"
+local executorVersion = "???"
+if identifyexecutor then
+	local name,ver = identifyexecutor()
+	executorName = name
+	executorVersion = ver
+elseif game:GetService("RunService"):IsStudio() then
+	executorName = "Studio"
+	executorVersion = version()
+end
+
 local function main()
 	local ScriptViewer = {}
 
 	local window,codeFrame
 
 	ScriptViewer.ViewScript = function(scr)
-		local s,source = pcall(env.decompile or function() end,scr)
-		if not s or not source then
-			source = "local test = 5\n\nlocal c = test + tick()\ngame.Workspace.Board:Destroy()\nstring.match('wow\\'f',\"yes\",3.4e-5,true)\ngame. Workspace.Wow\nfunction bar() print(54) end\n string . match() string 4 .match()"
-			source = source.."\n"..[==[
-			function a.sad() end
-			function a.b:sad() end
-			function 4.why() end
-			function a b() end
-			function string.match() end
-			function string.match.why() end
-			function local() end
-			function local.thing() end
-			string  . "sad" match
-			().magnitude = 3
-			a..b
-			a..b()
-			a...b
-			a...b()
-			a....b
-			a....b()
-			string..match()
-			string....match()
-			]==]
-		end
 
+		
+		
+		local oldtick = tick()
+		
+		local s,source = pcall(env.decompile or function() end,scr)
+		
+		if not s or not source then
+			source = "-- Unable to view source.\n"
+			source = source .. "-- Script Path: game."..scr:GetFullName().."\n"
+			if scr:IsA("Script") and scr.RunContext == Enum.RunContext.Legacy then
+				source = source .. "-- Reason: The script is likely to be running on server, or your executor does not support decompiler.\n"
+			else
+				source = source .. "-- Reason: Your executor does not support decompiler.\n"
+			end
+			source = source .. "-- Executor: "..executorName.." ("..executorVersion..")"
+		else
+			local decompiled = source
+			-- math.floor( (tick() - oldtick) * 100) / 100
+			source = "-- Script Path: game."..scr:GetFullName().."\n"
+			source = source .. "-- Took "..tostring(math.floor( (tick() - oldtick) * 100) / 100).."s to decompile.\n"
+			source = source .. "-- Executor: "..executorName.." ("..executorVersion..")\n\n"
+			
+			source = source .. decompiled
+			
+			oldtick = nil
+			decompiled = nil
+		end
+		
 		codeFrame:SetText(source)
 		window:Show()
 	end
 
 	ScriptViewer.Init = function()
 		window = Lib.Window.new()
-		window:SetTitle("Script Viewer")
+		window:SetTitle("Notepad")
 		window:Resize(500,400)
 		ScriptViewer.Window = window
 
@@ -77,10 +92,33 @@ local function main()
 		codeFrame.Frame.Size = UDim2.new(1,0,1,-20)
 		codeFrame.Frame.Parent = window.GuiElems.Content
 
-		-- TODO: REMOVE AND MAKE BETTER
+		local execute = Instance.new("TextButton",window.GuiElems.Content)
+		execute.BackgroundTransparency = 1
+		execute.Position = UDim2.new(0,0,0,0)
+		execute.Size = UDim2.new(0.25,0,0,20)
+		execute.Text = "Execute"
+		execute.TextColor3 = Color3.new(1,1,1)
+
+		execute.MouseButton1Click:Connect(function()
+			local source = codeFrame:GetText()
+			loadstring(source)()
+		end)
+		
+		local clear = Instance.new("TextButton",window.GuiElems.Content)
+		clear.BackgroundTransparency = 1
+		clear.Size = UDim2.new(0.25,0,0,20)
+		clear.Position = UDim2.new(0.25,0,0,0)
+		clear.Text = "Clear"
+		clear.TextColor3 = Color3.new(1,1,1)
+
+		clear.MouseButton1Click:Connect(function()
+			codeFrame:SetText("")
+		end)
+		
 		local copy = Instance.new("TextButton",window.GuiElems.Content)
 		copy.BackgroundTransparency = 1
-		copy.Size = UDim2.new(0.5,0,0,20)
+		copy.Size = UDim2.new(0.25,0,0,20)
+		copy.Position = UDim2.new(0.5,0,0,0)
 		copy.Text = "Copy to Clipboard"
 		copy.TextColor3 = Color3.new(1,1,1)
 
@@ -88,11 +126,13 @@ local function main()
 			local source = codeFrame:GetText()
 			setclipboard(source)
 		end)
+		
+		
 
 		local save = Instance.new("TextButton",window.GuiElems.Content)
 		save.BackgroundTransparency = 1
-		save.Position = UDim2.new(0.5,0,0,0)
-		save.Size = UDim2.new(0.5,0,0,20)
+		save.Size = UDim2.new(0.25,0,0,20)
+		save.Position = UDim2.new(0.75,0,0,0)
 		save.Text = "Save to File"
 		save.TextColor3 = Color3.new(1,1,1)
 

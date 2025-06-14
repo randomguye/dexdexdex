@@ -5,6 +5,11 @@
 Introducting you, the **Dex++**
 The **true** ultimate debugging suite. **Be free, be proud.**
 
+## Script
+```lua
+loadstring(game:HttpGet("wait"))()
+```
+
 ## What's the difference between Dex and Dex++?
 Since the original Dex is the last release and Moon have discontinued it, it still have missing features such as "Click part to select" for example.
 Dex++ will take over the legacy of Moon's Dex and addig missing features.

@@ -1,4 +1,4 @@
-# Dex++ - Debugging Auite
+# Dex++ - Debugging Suite
 ![Logo](/logo.png)
 
 ## Script

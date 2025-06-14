@@ -1,20 +1,16 @@
 --[[
-	New Dex
-	Final Version
-	Developed by Moon
+	Dex++
+	Beta 1.0.1 Version
+	
+	Created by Moon
+	Modified by Chillz
 	
 	Dex is a debugging suite designed to help the user debug games and find any potential vulnerabilities.
-	
-	This is the final version of this script.
-	You are encouraged to edit, fork, do whatever with this. I pretty much won't be updating it anymore.
-	Though I would appreciate it if you kept the credits in the script if you enjoy this hard work.
-	
-	If you want more info, you can join the server: https://discord.io/zinnia
-	Note that very limited to no support will be provided.
 ]]
 
+local cloneref = cloneref or function(...) return ... end
 -- Main vars
-local Main, Explorer, Properties, ScriptViewer, DefaultSettings, Notebook, Serializer, Lib
+local Main, Explorer, Properties, ScriptViewer, Console, DefaultSettings, Notebook, Serializer, Lib
 local API, RMD
 
 -- Default Settings
@@ -36,7 +32,7 @@ DefaultSettings = (function()
 			_Recurse = true,
 			MaxConflictCheck = 50,
 			ShowDeprecated = false,
-			ShowHidden = false,
+			ShowHidden = true,
 			ClearOnFocus = false,
 			LoadstringInput = true,
 			NumberRounding = 3,
@@ -97,7 +93,7 @@ local Settings = {}
 local Apps = {}
 local env = {}
 local service = setmetatable({},{__index = function(self,name)
-	local serv = game:GetService(name)
+	local serv = cloneref(game:GetService(name))
 	self[name] = serv
 	return serv
 end})
@@ -106,7 +102,7 @@ local plr = service.Players.LocalPlayer or service.Players.PlayerAdded:wait()
 local create = function(data)
 	local insts = {}
 	for i,v in pairs(data) do insts[v[1]] = Instance.new(v[2]) end
-	
+
 	for _,v in pairs(data) do
 		for prop,val in pairs(v[3]) do
 			if type(val) == "table" then
@@ -116,7 +112,7 @@ local create = function(data)
 			end
 		end
 	end
-	
+
 	return insts[1]
 end
 
@@ -131,6 +127,9 @@ end
 Main = (function()
 	local Main = {}
 	
+	--[[
+	-- Original Backup
+	
 	Main.ModuleList = {"Explorer","Properties","ScriptViewer"}
 	Main.Elevated = false
 	Main.MissingEnv = {}
@@ -140,21 +139,32 @@ Main = (function()
 	Main.Apps = Apps
 	Main.MenuApps = {}
 	Main.GitRepoName = "LorekeeperZinnia/Dex"
-	
+	]]
+
+	Main.ModuleList = {"Explorer","Properties","ScriptViewer","Console"}
+	Main.Elevated = false
+	Main.MissingEnv = {}
+	Main.Version = "Beta 1.1.0"
+	Main.Mouse = plr:GetMouse()
+	Main.AppControls = {}
+	Main.Apps = Apps
+	Main.MenuApps = {}
+	Main.GitRepoName = "AZYsGithub/DexPlusPlus"
+
 	Main.DisplayOrders = {
 		SideWindow = 8,
 		Window = 10,
 		Menu = 100000,
 		Core = 101000
 	}
-	
+
 	Main.GetInitDeps = function()
 		return {
 			Main = Main,
 			Lib = Lib,
 			Apps = Apps,
 			Settings = Settings,
-			
+
 			API = API,
 			RMD = RMD,
 			env = env,
@@ -164,7 +174,7 @@ Main = (function()
 			createSimple = createSimple
 		}
 	end
-	
+
 	Main.Error = function(str)
 		if rconsoleprint then
 			rconsoleprint("DEX ERROR: "..tostring(str).."\n")
@@ -173,24 +183,24 @@ Main = (function()
 			error(str)
 		end
 	end
-	
+
 	Main.LoadModule = function(name)
 		if Main.Elevated then -- If you don't have filesystem api then ur outta luck tbh
 			local control
-			
+
 			if EmbeddedModules then -- Offline Modules
 				control = EmbeddedModules[name]()
-				
+
 				-- TODO: Remove when open source
 				if gethsfuncs then
 					control = _G.moduleData
 				end
-				
+
 				if not control then Main.Error("Missing Embedded Module: "..name) end
 			elseif _G.DebugLoadModel then -- Load Debug Model File
 				local model = Main.DebugModel
 				if not model then model = game:GetObjects(getsynasset("AfterModules.rbxm"))[1] end
-				
+
 				control = loadstring(model.Modules[name].Source)()
 				print("Locally Loaded Module",name,control)
 			else
@@ -199,31 +209,31 @@ Main = (function()
 				if not hashs then
 					local s,hashDataStr = pcall(game.HttpGet, game, "https://api.github.com/repos/"..Main.GitRepoName.."/ModuleHashs.dat")
 					if not s then Main.Error("Failed to get module hashs") end
-					
+
 					local s,hashData = pcall(service.HttpService.JSONDecode,service.HttpService,hashDataStr)
 					if not s then Main.Error("Failed to decode module hash JSON") end
-					
+
 					hashs = hashData
 					Main.ModuleHashData = hashs
 				end
-				
+
 				-- Check if local copy exists with matching hashs
 				local hashfunc = (syn and syn.crypt.hash) or function() return "" end
 				local filePath = "dex/ModuleCache/"..name..".lua"
 				local s,moduleStr = pcall(env.readfile,filePath)
-				
+
 				if s and hashfunc(moduleStr) == hashs[name] then
 					control = loadstring(moduleStr)()
 				else
 					-- Download and cache
 					local s,moduleStr = pcall(game.HttpGet, game, "https://api.github.com/repos/"..Main.GitRepoName.."/Modules/"..name..".lua")
 					if not s then Main.Error("Failed to get external module data of "..name) end
-					
+
 					env.writefile(filePath,moduleStr)
 					control = loadstring(moduleStr)()
 				end
 			end
-			
+
 			Main.AppControls[name] = control
 			control.InitDeps(Main.GetInitDeps())
 
@@ -233,17 +243,17 @@ Main = (function()
 		else
 			local module = script:WaitForChild("Modules"):WaitForChild(name,2)
 			if not module then Main.Error("CANNOT FIND MODULE "..name) end
-			
+
 			local control = require(module)
 			Main.AppControls[name] = control
 			control.InitDeps(Main.GetInitDeps())
-			
+
 			local moduleData = control.Main()
 			Apps[name] = moduleData
 			return moduleData
 		end
 	end
-	
+
 	Main.LoadModules = function()
 		for i,v in pairs(Main.ModuleList) do
 			local s,e = pcall(Main.LoadModule,v)
@@ -251,19 +261,21 @@ Main = (function()
 				Main.Error("FAILED LOADING " + v + " CAUSE " + e)
 			end
 		end
-		
+
 		-- Init Major Apps and define them in modules
 		Explorer = Apps.Explorer
 		Properties = Apps.Properties
 		ScriptViewer = Apps.ScriptViewer
+		Console = Apps.Console
 		Notebook = Apps.Notebook
 		local appTable = {
 			Explorer = Explorer,
 			Properties = Properties,
 			ScriptViewer = ScriptViewer,
+			Console = Console,
 			Notebook = Notebook
 		}
-		
+
 		Main.AppControls.Lib.InitAfterMain(appTable)
 		for i,v in pairs(Main.ModuleList) do
 			local control = Main.AppControls[v]
@@ -272,13 +284,13 @@ Main = (function()
 			end
 		end
 	end
-	
+
 	Main.InitEnv = function()
 		setmetatable(env,{__newindex = function(self,name,func)
 			if not func then Main.MissingEnv[#Main.MissingEnv+1] = name return end
 			rawset(self,name,func)
 		end})
-		
+
 		-- file
 		env.readfile = readfile
 		env.writefile = writefile
@@ -287,7 +299,7 @@ Main = (function()
 		env.listfiles = listfiles
 		env.loadfile = loadfile
 		env.saveinstance = saveinstance
-		
+
 		-- debug
 		env.getupvalues = debug.getupvalues or getupvals
 		env.getconstants = debug.getconstants or getconsts
@@ -295,7 +307,7 @@ Main = (function()
 		env.checkcaller = checkcaller
 		env.getreg = getreg
 		env.getgc = getgc
-		
+
 		-- other
 		env.setfflag = setfflag
 		env.decompile = decompile
@@ -304,16 +316,16 @@ Main = (function()
 		env.setclipboard = setclipboard
 		env.getnilinstances = getnilinstances or get_nil_instances
 		env.getloadedmodules = getloadedmodules
-		
+
 		if identifyexecutor then
 			Main.Executor = identifyexecutor()
 		end
-		
+
 		Main.GuiHolder = Main.Elevated and service.CoreGui or plr:FindFirstChildOfClass("PlayerGui")
-		
+
 		setmetatable(env,nil)
 	end
-	
+
 	--[[
 	Main.IncompatibleTest = function()
 		local function incompatibleMessage(reason)
@@ -363,14 +375,14 @@ Main = (function()
 		second = true
 	end
 	]]
-	
+
 	Main.LoadSettings = function()
 		local s,data = pcall(env.readfile or error,"DexSettings.json")
 		if s and data and data ~= "" then
 			local s,decoded = service.HttpService:JSONDecode(data)
 			if s and decoded then
 				for i,v in next,decoded do
-					
+
 				end
 			else
 				-- TODO: Notification
@@ -379,7 +391,7 @@ Main = (function()
 			Main.ResetSettings()
 		end
 	end
-	
+
 	Main.ResetSettings = function()
 		local function recur(t,res)
 			for set,val in pairs(t) do
@@ -396,7 +408,7 @@ Main = (function()
 		end
 		recur(DefaultSettings,Settings)
 	end
-	
+
 	Main.FetchAPI = function()
 		local api,rawAPI
 		if Main.Elevated then
@@ -418,10 +430,10 @@ Main = (function()
 		end
 		Main.RawAPI = rawAPI
 		api = service.HttpService:JSONDecode(rawAPI)
-		
+
 		local classes,enums = {},{}
 		local categoryOrder,seenCategories = {},{}
-		
+
 		local function insertAbove(t,item,aboveItem)
 			local findPos = table.find(t,item)
 			if not findPos then return end
@@ -431,7 +443,7 @@ Main = (function()
 			if not pos then return end
 			table.insert(t,pos,item)
 		end
-		
+
 		for _,class in pairs(api.Classes) do
 			local newClass = {}
 			newClass.Name = class.Name
@@ -441,7 +453,7 @@ Main = (function()
 			newClass.Events = {}
 			newClass.Callbacks = {}
 			newClass.Tags = {}
-			
+
 			if class.Tags then for c,tag in pairs(class.Tags) do newClass.Tags[tag] = true end end
 			for __,member in pairs(class.Members) do
 				local newMember = {}
@@ -450,7 +462,7 @@ Main = (function()
 				newMember.Security = member.Security
 				newMember.Tags ={}
 				if member.Tags then for c,tag in pairs(member.Tags) do newMember.Tags[tag] = true end end
-				
+
 				local mType = member.MemberType
 				if mType == "Property" then
 					local propCategory = member.Category or "Other"
@@ -478,20 +490,20 @@ Main = (function()
 					table.insert(newClass.Events,newMember)
 				end
 			end
-			
+
 			classes[class.Name] = newClass
 		end
-		
+
 		for _,class in pairs(classes) do
 			class.Superclass = classes[class.Superclass]
 		end
-		
+
 		for _,enum in pairs(api.Enums) do
 			local newEnum = {}
 			newEnum.Name = enum.Name
 			newEnum.Items = {}
 			newEnum.Tags = {}
-			
+
 			if enum.Tags then for c,tag in pairs(enum.Tags) do newEnum.Tags[tag] = true end end
 			for __,item in pairs(enum.Items) do
 				local newItem = {}
@@ -499,26 +511,26 @@ Main = (function()
 				newItem.Value = item.Value
 				table.insert(newEnum.Items,newItem)
 			end
-			
+
 			enums[enum.Name] = newEnum
 		end
-		
+
 		local function getMember(class,member)
 			if not classes[class] or not classes[class][member] then return end
-	        local result = {}
-	
-	        local currentClass = classes[class]
-	        while currentClass do
-	            for _,entry in pairs(currentClass[member]) do
-	                result[#result+1] = entry
-	            end
-	            currentClass = currentClass.Superclass
-	        end
-	
-	        table.sort(result,function(a,b) return a.Name < b.Name end)
-	        return result
+			local result = {}
+
+			local currentClass = classes[class]
+			while currentClass do
+				for _,entry in pairs(currentClass[member]) do
+					result[#result+1] = entry
+				end
+				currentClass = currentClass.Superclass
+			end
+
+			table.sort(result,function(a,b) return a.Name < b.Name end)
+			return result
 		end
-		
+
 		insertAbove(categoryOrder,"Behavior","Tuning")
 		insertAbove(categoryOrder,"Appearance","Data")
 		insertAbove(categoryOrder,"Attachments","Axes")
@@ -531,12 +543,12 @@ Main = (function()
 		insertAbove(categoryOrder,"Character","Controls")
 		categoryOrder[#categoryOrder+1] = "Unscriptable"
 		categoryOrder[#categoryOrder+1] = "Attributes"
-		
+
 		local categoryOrderMap = {}
 		for i = 1,#categoryOrder do
 			categoryOrderMap[categoryOrder[i]] = i
 		end
-		
+
 		return {
 			Classes = classes,
 			Enums = enums,
@@ -544,7 +556,7 @@ Main = (function()
 			GetMember = getMember
 		}
 	end
-	
+
 	Main.FetchRMD = function()
 		local rawXML
 		if Main.Elevated then
@@ -569,7 +581,7 @@ Main = (function()
 		local classList = parsed.children[1].children[1].children
 		local enumList = parsed.children[1].children[2].children
 		local propertyOrders = {}
-		
+
 		local classes,enums = {},{}
 		for _,class in pairs(classList) do
 			local className = ""
@@ -628,7 +640,7 @@ Main = (function()
 				end
 			end
 		end
-		
+
 		for _,enum in pairs(enumList) do
 			local enumName = ""
 			for _,child in pairs(enum.children) do
@@ -656,32 +668,32 @@ Main = (function()
 				end
 			end
 		end
-		
+
 		return {Classes = classes, Enums = enums, PropertyOrders = propertyOrders}
 	end
-	
+
 	Main.ShowGui = function(gui)
 		if env.protectgui then
 			env.protectgui(gui)
 		end
 		gui.Parent = Main.GuiHolder
 	end
-	
+
 	Main.CreateIntro = function(initStatus) -- TODO: Must theme and show errors
 		local gui = create({
 			{1,"ScreenGui",{Name="Intro",}},
 			{2,"Frame",{Active=true,BackgroundColor3=Color3.new(0.20392157137394,0.20392157137394,0.20392157137394),BorderSizePixel=0,Name="Main",Parent={1},Position=UDim2.new(0.5,-175,0.5,-100),Size=UDim2.new(0,350,0,200),}},
 			{3,"Frame",{BackgroundColor3=Color3.new(0.17647059261799,0.17647059261799,0.17647059261799),BorderSizePixel=0,ClipsDescendants=true,Name="Holder",Parent={2},Size=UDim2.new(1,0,1,0),}},
 			{4,"UIGradient",{Parent={3},Rotation=30,Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1,0),NumberSequenceKeypoint.new(1,1,0),}),}},
-			{5,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=4,Name="Title",Parent={3},Position=UDim2.new(0,-190,0,15),Size=UDim2.new(0,100,0,50),Text="Dex",TextColor3=Color3.new(1,1,1),TextSize=50,TextTransparency=1,}},
-			{6,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Desc",Parent={3},Position=UDim2.new(0,-230,0,60),Size=UDim2.new(0,180,0,25),Text="Ultimate Debugging Suite",TextColor3=Color3.new(1,1,1),TextSize=18,TextTransparency=1,}},
+			{5,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=4,Name="Title",Parent={3},Position=UDim2.new(0,-190,0,15),Size=UDim2.new(0,100,0,50),Text="Dex++",TextColor3=Color3.new(1,1,1),TextSize=50,TextTransparency=1,}},
+			{6,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Desc",Parent={3},Position=UDim2.new(0,-230,0,60),Size=UDim2.new(0,180,0,25),Text="Your Debugging Buddy",TextColor3=Color3.new(1,1,1),TextSize=18,TextTransparency=1,}},
 			{7,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="StatusText",Parent={3},Position=UDim2.new(0,20,0,110),Size=UDim2.new(0,180,0,25),Text="Fetching API",TextColor3=Color3.new(1,1,1),TextSize=14,TextTransparency=1,}},
 			{8,"Frame",{BackgroundColor3=Color3.new(0.20392157137394,0.20392157137394,0.20392157137394),BorderSizePixel=0,Name="ProgressBar",Parent={3},Position=UDim2.new(0,110,0,145),Size=UDim2.new(0,0,0,4),}},
 			{9,"Frame",{BackgroundColor3=Color3.new(0.2392156869173,0.56078433990479,0.86274510622025),BorderSizePixel=0,Name="Bar",Parent={8},Size=UDim2.new(0,0,1,0),}},
 			{10,"ImageLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Image="rbxassetid://2764171053",ImageColor3=Color3.new(0.17647059261799,0.17647059261799,0.17647059261799),Parent={8},ScaleType=1,Size=UDim2.new(1,0,1,0),SliceCenter=Rect.new(2,2,254,254),}},
-			{11,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Creator",Parent={2},Position=UDim2.new(1,-110,1,-20),Size=UDim2.new(0,105,0,20),Text="Developed by Moon",TextColor3=Color3.new(1,1,1),TextSize=14,TextXAlignment=1,}},
+			{11,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Creator",Parent={2},Position=UDim2.new(1,-110,1,-20),Size=UDim2.new(0,105,0,20),Text="Developed by Moon, Modified by Chillz",TextColor3=Color3.new(1,1,1),TextSize=14,TextXAlignment=1,}},
 			{12,"UIGradient",{Parent={11},Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1,0),NumberSequenceKeypoint.new(1,1,0),}),}},
-			{13,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Version",Parent={2},Position=UDim2.new(1,-110,1,-35),Size=UDim2.new(0,105,0,20),Text="Beta 1.0.0",TextColor3=Color3.new(1,1,1),TextSize=14,TextXAlignment=1,}},
+			{13,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Version",Parent={2},Position=UDim2.new(1,-110,1,-35),Size=UDim2.new(0,105,0,20),Text="Beta 1.1.0",TextColor3=Color3.new(1,1,1),TextSize=14,TextXAlignment=1,}},
 			{14,"UIGradient",{Parent={13},Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1,0),NumberSequenceKeypoint.new(1,1,0),}),}},
 			{15,"ImageLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,BorderSizePixel=0,Image="rbxassetid://1427967925",Name="Outlines",Parent={2},Position=UDim2.new(0,-5,0,-5),ScaleType=1,Size=UDim2.new(1,10,1,10),SliceCenter=Rect.new(6,6,25,25),TileSize=UDim2.new(0,20,0,20),}},
 			{16,"UIGradient",{Parent={15},Rotation=-30,Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1,0),NumberSequenceKeypoint.new(1,1,0),}),}},
@@ -700,7 +712,7 @@ Main = (function()
 		local statusText = gui.Main.Holder.StatusText
 		local progressBar = gui.Main.Holder.ProgressBar
 		local tweenS = service.TweenService
-		
+
 		local renderStepped = service.RunService.RenderStepped
 		local signalWait = renderStepped.wait
 		local fastwait = function(s)
@@ -708,9 +720,9 @@ Main = (function()
 			local start = tick()
 			while tick() - start < s do signalWait(renderStepped) end
 		end
-		
+
 		statusText.Text = initStatus
-		
+
 		local function tweenNumber(n,ti,func)
 			local tweenVal = Instance.new("IntValue")
 			tweenVal.Value = 0
@@ -721,24 +733,24 @@ Main = (function()
 				tweenVal:Destroy()
 			end)
 		end
-		
+
 		local ti = TweenInfo.new(0.4,Enum.EasingStyle.Quad,Enum.EasingDirection.Out)
 		tweenNumber(100,ti,function(val)
-			    val = val/200
-				local start = NumberSequenceKeypoint.new(0,0)
-				local a1 = NumberSequenceKeypoint.new(val,0)
-				local a2 = NumberSequenceKeypoint.new(math.min(0.5,val+math.min(0.05,val)),1)
-				if a1.Time == a2.Time then a2 = a1 end
-				local b1 = NumberSequenceKeypoint.new(1-val,0)
-				local b2 = NumberSequenceKeypoint.new(math.max(0.5,1-val-math.min(0.05,val)),1)
-				if b1.Time == b2.Time then b2 = b1 end
-				local goal = NumberSequenceKeypoint.new(1,0)
-				backGradient.Transparency = NumberSequence.new({start,a1,a2,b2,b1,goal})
-				outlinesGradient.Transparency = NumberSequence.new({start,a1,a2,b2,b1,goal})
+			val = val/200
+			local start = NumberSequenceKeypoint.new(0,0)
+			local a1 = NumberSequenceKeypoint.new(val,0)
+			local a2 = NumberSequenceKeypoint.new(math.min(0.5,val+math.min(0.05,val)),1)
+			if a1.Time == a2.Time then a2 = a1 end
+			local b1 = NumberSequenceKeypoint.new(1-val,0)
+			local b2 = NumberSequenceKeypoint.new(math.max(0.5,1-val-math.min(0.05,val)),1)
+			if b1.Time == b2.Time then b2 = b1 end
+			local goal = NumberSequenceKeypoint.new(1,0)
+			backGradient.Transparency = NumberSequence.new({start,a1,a2,b2,b1,goal})
+			outlinesGradient.Transparency = NumberSequence.new({start,a1,a2,b2,b1,goal})
 		end)
-		
+
 		fastwait(0.4)
-		
+
 		tweenNumber(100,ti,function(val)
 			val = val/166.66
 			local start = NumberSequenceKeypoint.new(0,0)
@@ -747,10 +759,10 @@ Main = (function()
 			local goal = NumberSequenceKeypoint.new(1,1)
 			holderGradient.Transparency = NumberSequence.new({start,a1,a2,goal})
 		end)
-		
+
 		tweenS:Create(titleText,ti,{Position = UDim2.new(0,60,0,15), TextTransparency = 0}):Play()
 		tweenS:Create(descText,ti,{Position = UDim2.new(0,20,0,60), TextTransparency = 0}):Play()
-		
+
 		local function rightTextTransparency(obj)
 			tweenNumber(100,ti,function(val)
 				val = val/100
@@ -764,21 +776,21 @@ Main = (function()
 		end
 		rightTextTransparency(versionGradient)
 		rightTextTransparency(creatorGradient)
-		
+
 		fastwait(0.9)
-		
+
 		local progressTI = TweenInfo.new(0.25,Enum.EasingStyle.Quad,Enum.EasingDirection.Out)
-		
+
 		tweenS:Create(statusText,progressTI,{Position = UDim2.new(0,20,0,120), TextTransparency = 0}):Play()
 		tweenS:Create(progressBar,progressTI,{Position = UDim2.new(0,60,0,145), Size = UDim2.new(0,100,0,4)}):Play()
-		
+
 		fastwait(0.25)
-		
+
 		local function setProgress(text,n)
 			statusText.Text = text
 			tweenS:Create(progressBar.Bar,progressTI,{Size = UDim2.new(n,0,1,0)}):Play()
 		end
-		
+
 		local function close()
 			tweenS:Create(titleText,progressTI,{TextTransparency = 1}):Play()
 			tweenS:Create(descText,progressTI,{TextTransparency = 1}):Play()
@@ -788,7 +800,7 @@ Main = (function()
 			tweenS:Create(progressBar,progressTI,{BackgroundTransparency = 1}):Play()
 			tweenS:Create(progressBar.Bar,progressTI,{BackgroundTransparency = 1}):Play()
 			tweenS:Create(progressBar.ImageLabel,progressTI,{ImageTransparency = 1}):Play()
-			
+
 			tweenNumber(100,TweenInfo.new(0.4,Enum.EasingStyle.Back,Enum.EasingDirection.In),function(val)
 				val = val/250
 				local start = NumberSequenceKeypoint.new(0,0)
@@ -798,11 +810,11 @@ Main = (function()
 				local goal = NumberSequenceKeypoint.new(1,a1 == a2 and 0 or 1)
 				holderGradient.Transparency = NumberSequence.new({start,a1,a2,goal})
 			end)
-			
+
 			fastwait(0.5)
 			gui.Main.BackgroundTransparency = 1
 			outlinesGradient.Rotation = 30
-			
+
 			tweenNumber(100,ti,function(val)
 				val = val/100
 				local start = NumberSequenceKeypoint.new(0,1)
@@ -813,20 +825,20 @@ Main = (function()
 				outlinesGradient.Transparency = NumberSequence.new({start,a1,a2,goal})
 				holderGradient.Transparency = NumberSequence.new({start,a1,a2,goal})
 			end)
-			
+
 			fastwait(0.45)
 			gui:Destroy()
 		end
-		
+
 		return {SetProgress = setProgress, Close = close}
 	end
-	
+
 	Main.CreateApp = function(data)
 		if Main.MenuApps[data.Name] then return end -- TODO: Handle conflict
 		local control = {}
-		
+
 		local app = Main.AppTemplate:Clone()
-		
+
 		local iconIndex = data.Icon
 		if data.IconMap and iconIndex then
 			if type(iconIndex) == "number" then
@@ -839,12 +851,12 @@ Main = (function()
 		else
 			app.Main.Icon.Image = ""
 		end
-		
+
 		local function updateState()
 			app.Main.BackgroundTransparency = data.Open and 0 or (Lib.CheckMouseInGui(app.Main) and 0 or 1)
 			app.Main.Highlight.Visible = data.Open
 		end
-		
+
 		local function enable(silent)
 			if data.Open then return end
 			data.Open = true
@@ -854,7 +866,7 @@ Main = (function()
 				if data.OnClick then data.OnClick(data.Open) end
 			end
 		end
-		
+
 		local function disable(silent)
 			if not data.Open then return end
 			data.Open = false
@@ -864,58 +876,58 @@ Main = (function()
 				if data.OnClick then data.OnClick(data.Open) end
 			end
 		end
-		
+
 		updateState()
-		
+
 		local ySize = service.TextService:GetTextSize(data.Name,14,Enum.Font.SourceSans,Vector2.new(62,999999)).Y
 		app.Main.Size = UDim2.new(1,0,0,math.clamp(46+ySize,60,74))
 		app.Main.AppName.Text = data.Name
-		
+
 		app.Main.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseMovement then
 				app.Main.BackgroundTransparency = 0
 				app.Main.BackgroundColor3 = Settings.Theme.ButtonHover
 			end
 		end)
-		
+
 		app.Main.InputEnded:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseMovement then
 				app.Main.BackgroundTransparency = data.Open and 0 or 1
 				app.Main.BackgroundColor3 = Settings.Theme.Button
 			end
 		end)
-		
+
 		app.Main.MouseButton1Click:Connect(function()
 			if data.Open then disable() else enable() end
 		end)
-		
+
 		local window = data.Window
 		if window then
 			window.OnActivate:Connect(function() enable(true) end)
 			window.OnDeactivate:Connect(function() disable(true) end)
 		end
-		
+
 		app.Visible = true
 		app.Parent = Main.AppsContainer
 		Main.AppsFrame.CanvasSize = UDim2.new(0,0,0,Main.AppsContainerGrid.AbsoluteCellCount.Y*82 + 8)
-		
+
 		control.Enable = enable
 		control.Disable = disable
 		Main.MenuApps[data.Name] = control
 		return control
 	end
-	
+
 	Main.SetMainGuiOpen = function(val)
 		Main.MainGuiOpen = val
-		
+
 		Main.MainGui.OpenButton.Text = val and "X" or "Dex"
 		if val then Main.MainGui.OpenButton.MainFrame.Visible = true end
 		Main.MainGui.OpenButton.MainFrame:TweenSize(val and UDim2.new(0,224,0,200) or UDim2.new(0,0,0,0),Enum.EasingDirection.Out,Enum.EasingStyle.Quad,0.2,true)
 		--Main.MainGui.OpenButton.BackgroundTransparency = val and 0 or (Lib.CheckMouseInGui(Main.MainGui.OpenButton) and 0 or 0.2)
 		service.TweenService:Create(Main.MainGui.OpenButton,TweenInfo.new(0.2,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{BackgroundTransparency = val and 0 or (Lib.CheckMouseInGui(Main.MainGui.OpenButton) and 0 or 0.2)}):Play()
-		
+
 		if Main.MainGuiMouseEvent then Main.MainGuiMouseEvent:Disconnect() end
-		
+
 		if not val then
 			local startTime = tick()
 			Main.MainGuiCloseTime = startTime
@@ -931,7 +943,7 @@ Main = (function()
 			end)
 		end
 	end
-	
+
 	Main.CreateMainGui = function()
 		local gui = create({
 			{1,"ScreenGui",{IgnoreGuiInset=true,Name="MainMenu",}},
@@ -962,7 +974,7 @@ Main = (function()
 		Main.AppsContainerGrid = Main.AppsContainer.UIGridLayout
 		Main.AppTemplate = gui.App
 		Main.MainGuiOpen = false
-		
+
 		local openButton = gui.OpenButton
 		openButton.BackgroundTransparency = 0.2
 		openButton.MainFrame.Size = UDim2.new(0,0,0,0)
@@ -970,7 +982,7 @@ Main = (function()
 		openButton.MouseButton1Click:Connect(function()
 			Main.SetMainGuiOpen(not Main.MainGuiOpen)
 		end)
-		
+
 		openButton.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseMovement then
 				service.TweenService:Create(Main.MainGui.OpenButton,TweenInfo.new(0,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{BackgroundTransparency = 0}):Play()
@@ -982,47 +994,65 @@ Main = (function()
 				service.TweenService:Create(Main.MainGui.OpenButton,TweenInfo.new(0,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{BackgroundTransparency = Main.MainGuiOpen and 0 or 0.2}):Play()
 			end
 		end)
-		
+
 		-- Create Main Apps
 		Main.CreateApp({Name = "Explorer", IconMap = Main.LargeIcons, Icon = "Explorer", Open = true, Window = Explorer.Window})
-		
+
 		Main.CreateApp({Name = "Properties", IconMap = Main.LargeIcons, Icon = "Properties", Open = true, Window = Properties.Window})
+
+		Main.CreateApp({Name = "Notepad", IconMap = Main.LargeIcons, Icon = "Script_Viewer", Window = ScriptViewer.Window})
 		
-		Main.CreateApp({Name = "Script Viewer", IconMap = Main.LargeIcons, Icon = "Script_Viewer", Window = ScriptViewer.Window})
-		
+		Main.CreateApp({Name = "Console", IconMap = Main.LargeIcons, Icon = "Output", Window = Console.Window})
+
+		local cptsOnMouseClick = nil
+		Main.CreateApp({Name = "Click part to select", IconMap = Main.LargeIcons, Icon = 6, OnClick = function(callback)
+			if callback then
+				local mouse = Main.Mouse
+				cptsOnMouseClick = mouse.Button1Down:Connect(function()
+					pcall(function()
+						local object = mouse.Target
+						if nodes[object] then
+							selection:Set(nodes[object])
+							Explorer.ViewNode(nodes[object])
+						end
+					end)
+				end)
+			else if cptsOnMouseClick ~= nil then cptsOnMouseClick:Disconnect() cptsOnMouseClick = nil end end
+		end})
+
 		Lib.ShowGui(gui)
 	end
-	
+
 	Main.SetupFilesystem = function()
 		if not env.writefile or not env.makefolder then return end
-		
+
 		local writefile,makefolder = env.writefile,env.makefolder
-		
+
 		makefolder("dex")
 		makefolder("dex/assets")
 		makefolder("dex/saved")
 		makefolder("dex/plugins")
 		makefolder("dex/ModuleCache")
 	end
-	
+
 	Main.LocalDepsUpToDate = function()
 		return Main.DepsVersionData and Main.ClientVersion == Main.DepsVersionData[1]
 	end
-	
+
 	Main.Init = function()
 		Main.Elevated = pcall(function() local a = game:GetService("CoreGui"):GetFullName() end)
 		Main.InitEnv()
 		Main.LoadSettings()
 		Main.SetupFilesystem()
-		
+
 		-- Load Lib
 		local intro = Main.CreateIntro("Initializing Library")
 		Lib = Main.LoadModule("Lib")
 		Lib.FastWait()
-		
+
 		-- Init other stuff
 		--Main.IncompatibleTest()
-		
+
 		-- Init icons
 		Main.MiscIcons = Lib.IconMap.new("rbxassetid://6511490623",256,256,16,16)
 		Main.MiscIcons:SetDict({
@@ -1035,9 +1065,9 @@ Main = (function()
 		})
 		Main.LargeIcons = Lib.IconMap.new("rbxassetid://6579106223",256,256,32,32)
 		Main.LargeIcons:SetDict({
-			Explorer = 0, Properties = 1, Script_Viewer = 2,
+			Explorer = 0, Properties = 1, Script_Viewer = 2, Output = 4
 		})
-		
+
 		-- Fetch version if needed
 		intro.SetProgress("Fetching Roblox Version",0.2)
 		if Main.Elevated then
@@ -1051,7 +1081,7 @@ Main = (function()
 			end
 			Main.RobloxVersion = Main.RobloxVersion or game:HttpGet("http://setup.roblox.com/versionQTStudio")
 		end
-		
+
 		-- Fetch external deps
 		intro.SetProgress("Fetching API",0.35)
 		API = Main.FetchAPI()
@@ -1059,34 +1089,35 @@ Main = (function()
 		intro.SetProgress("Fetching RMD",0.5)
 		RMD = Main.FetchRMD()
 		Lib.FastWait()
-		
+
 		-- Save external deps locally if needed
 		if Main.Elevated and env.writefile and not Main.LocalDepsUpToDate() then
 			env.writefile("dex/deps_version.dat",Main.ClientVersion.."\n"..Main.RobloxVersion)
 			env.writefile("dex/rbx_api.dat",Main.RawAPI)
 			env.writefile("dex/rbx_rmd.dat",Main.RawRMD)
 		end
-		
+
 		-- Load other modules
 		intro.SetProgress("Loading Modules",0.75)
 		Main.AppControls.Lib.InitDeps(Main.GetInitDeps()) -- Missing deps now available
 		Main.LoadModules()
 		Lib.FastWait()
-		
+
 		-- Init other modules
 		intro.SetProgress("Initializing Modules",0.9)
 		Explorer.Init()
 		Properties.Init()
 		ScriptViewer.Init()
+		Console.Init()
 		Lib.FastWait()
-		
+
 		-- Done
 		intro.SetProgress("Complete",1)
 		coroutine.wrap(function()
 			Lib.FastWait(1.25)
 			intro.Close()
 		end)()
-		
+
 		-- Init window system, create main menu, show explorer and properties
 		Lib.Window.Init()
 		Main.CreateMainGui()
@@ -1094,7 +1125,7 @@ Main = (function()
 		Properties.Window:Show({Align = "right", Pos = 2, Size = 0.5, Silent = true})
 		Lib.DeferFunc(function() Lib.Window.ToggleSide("right") end)
 	end
-	
+
 	return Main
 end)()
 

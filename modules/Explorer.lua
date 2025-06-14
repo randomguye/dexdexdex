@@ -33,7 +33,10 @@ end
 
 local function main()
 	local Explorer = {}
-	local nodes,tree,listEntries,explorerOrders,searchResults,specResults = {},{},{},{},{},{}
+	local tree,listEntries,explorerOrders,searchResults,specResults = {},{},{},{},{}
+	
+	nodes = nodes or {}
+	
 	local expanded
 	local entryTemplate,treeFrame,toolBar,descendantAddedCon,descendantRemovingCon,itemChangedCon
 	local ffa = game.FindFirstAncestorWhichIsA
@@ -42,7 +45,7 @@ local function main()
 	local updateDebounce,refreshDebounce = false,false
 	local nilNode = {Obj = Instance.new("Folder")}
 	local idCounter = 0
-	local scrollV,scrollH,selection,clipboard
+	local scrollV,scrollH,clipboard
 	local renameBox,renamingNode,searchFunc
 	local sortingEnabled,autoUpdateSearch
 	local table,math = table,math
@@ -118,7 +121,7 @@ local function main()
 		for i = 1,#insts do
 			local obj = insts[i]
 			if nodes[obj] then continue end -- Deferred
-			
+
 			local par = nodes[ffa(obj,"Instance")]
 			if not par then continue end
 			local newNode = {Obj = obj, Parent = par}
@@ -873,7 +876,7 @@ local function main()
 		context:AddRegistered("VIEW_CONNECTIONS")
 		context:AddRegistered("GET_REFERENCES")
 		context:AddRegistered("VIEW_API")
-		
+
 		context:QueueDivider()
 
 		if presentClasses["BasePart"] or presentClasses["Model"] then
@@ -1267,7 +1270,7 @@ local function main()
 		context:Register("REFRESH_NIL",{Name = "Refresh Nil Instances", OnClick = function()
 			Explorer.RefreshNilInstances()
 		end})
-		
+
 		context:Register("HIDE_NIL",{Name = "Hide Nil Instances", OnClick = function()
 			Explorer.HideNilInstances()
 		end})
@@ -1277,7 +1280,7 @@ local function main()
 
 	Explorer.HideNilInstances = function()
 		table.clear(nilMap)
-		
+
 		local disconnectCon = Instance.new("Folder").ChildAdded:Connect(function() end).Disconnect
 		for i,v in next,nilCons do
 			disconnectCon(v[1])

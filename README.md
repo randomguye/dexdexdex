@@ -7,7 +7,7 @@ The **true** ultimate debugging suite. **Be free, be proud.**
 
 ## Script
 ```lua
-loadstring(game:HttpGet("wait"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DexPlusPlus/refs/heads/master/out.lua"))()
 ```
 
 ## What's the difference between Dex and Dex++?
@@ -39,5 +39,7 @@ Note that very limited to no support will be provided.~~
 
 ## Credits
 .chill.z. (Dex++ Maintainer)
+
 [Moon](https://github.com/LorekeeperZinnia/Dex) (Creator)
+
 [Toon](https://github.com/Toon-arch) (Click part to select)

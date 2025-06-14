@@ -1,9 +1,5 @@
-# Dex++ - Your Debugging Buddy
+# Dex++ - Debugging Auite
 ![Logo](/logo.png)
-
-## Intro
-Introducting you, the **Dex++**
-The **true** ultimate debugging suite. **Be free, be proud.**
 
 ## Script
 ```lua

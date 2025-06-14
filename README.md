@@ -1,4 +1,6 @@
-# Dex - The Freedom Explorer
+# THIS PROJECT IS STILL WORK ON PROGRESS
+
+# Dex - Your Debugging Buddy
 ![Logo](/logo.png)
 
 ## Intro

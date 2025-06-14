@@ -663,7 +663,7 @@ local function main()
 				unformattedText = os.date("%H:%M:%S")..'   '..msg
 				if msgtype == Enum.MessageType.MessageOutput then
 					formattedText = os.date("%H:%M:%S")..'   <font color="rgb(204, 204, 204)">'..msg..'</font>'
-					newOutputText.Text = unformattedText
+					newOutputText.Text = formattedText
 				elseif msgtype == Enum.MessageType.MessageWarning then
 					formattedText = os.date("%H:%M:%S")..'   <b><font color="rgb(255, 142, 60)">'..msg..'</font></b>'
 					newOutputText.Text = formattedText

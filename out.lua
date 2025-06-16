@@ -1,10 +1,22 @@
+--[[
+	Dex++
+	Beta 1.2.0 Version
+	
+	Created by Moon
+	Edited by Chillz
+	
+	Dex is a debugging suite designed to help the user debug games and find any potential vulnerabilities.
+]]
+
+
+local nodes = {}
+local selection
 local EmbeddedModules = {
 ["Console"] = function()
 --[[
 	Console App Module
 	
-	Yes this does not exist on original Dex.
-	However, it is very useful for debugging and have nicer UI than Roblox itself :3
+	Yes this does not exist on original Dex
 ]]
 
 -- Common Locals
@@ -39,684 +51,709 @@ local function main()
 
 	local window,ConsoleFrame
 	
-	local OutputLimit = 500 -- Same as Roblox.
+	local OutputLimit = 500 -- Same as Roblox Console.
 	
-	Console.Init = function()
-		
-		
-		
-		-- Instances: 29 | Scripts: 1 | Modules: 1 | Tags: 0
-		local G2L = {};
+	
+	-- Instances: 29 | Scripts: 1 | Modules: 1 | Tags: 0
+	local G2L = {};
 
-		-- StarterGui.ScreenGui
-		window = Lib.Window.new()
-		window:SetTitle("Console")
-		window:Resize(500,400)
-		Console.Window = window
-		
-		-- StarterGui.ScreenGui.Console
-		ConsoleFrame = Instance.new("ImageButton", window.GuiElems.Content);
-		ConsoleFrame["BorderSizePixel"] = 0;
-		ConsoleFrame["AutoButtonColor"] = false;
-		ConsoleFrame["BackgroundTransparency"] = 1;
-		ConsoleFrame["BackgroundColor3"] = Color3.fromRGB(47, 47, 47);
-		ConsoleFrame["Selectable"] = false;
-		ConsoleFrame["Size"] = UDim2.new(1,0,1,0);
-		ConsoleFrame["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		ConsoleFrame["Name"] = [[Console]];
-		ConsoleFrame["Position"] = UDim2.new(0,0,0,0);
+	-- StarterGui.ScreenGui
+	window = Lib.Window.new()
+	window:SetTitle("Console")
+	window:Resize(500,400)
+	Console.Window = window
+
+	-- StarterGui.ScreenGui.Console
+	ConsoleFrame = Instance.new("ImageButton", window.GuiElems.Content);
+	ConsoleFrame["BorderSizePixel"] = 0;
+	ConsoleFrame["AutoButtonColor"] = false;
+	ConsoleFrame["BackgroundTransparency"] = 1;
+	ConsoleFrame["BackgroundColor3"] = Color3.fromRGB(47, 47, 47);
+	ConsoleFrame["Selectable"] = false;
+	ConsoleFrame["Size"] = UDim2.new(1,0,1,0);
+	ConsoleFrame["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	ConsoleFrame["Name"] = [[Console]];
+	ConsoleFrame["Position"] = UDim2.new(0,0,0,0);
 
 
-		-- StarterGui.ScreenGui.Console.CommandLine
-		G2L["3"] = Instance.new("Frame", ConsoleFrame);
-		G2L["3"]["BorderSizePixel"] = 0;
-		G2L["3"]["BackgroundColor3"] = Color3.fromRGB(37, 37, 37);
-		G2L["3"]["AnchorPoint"] = Vector2.new(0.5, 1);
-		G2L["3"]["ClipsDescendants"] = true;
-		G2L["3"]["Size"] = UDim2.new(1, -8, 0, 22);
-		G2L["3"]["Position"] = UDim2.new(0.5, 0, 1, -5);
-		G2L["3"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["3"]["Name"] = [[CommandLine]];
+	-- StarterGui.ScreenGui.Console.CommandLine
+	G2L["3"] = Lib.Frame.new().Gui--Instance.new("Frame", ConsoleFrame);
+	G2L["3"].Parent = ConsoleFrame
+	G2L["3"]["BorderSizePixel"] = 0;
+	G2L["3"]["BackgroundColor3"] = Color3.fromRGB(37, 37, 37);
+	G2L["3"]["AnchorPoint"] = Vector2.new(0.5, 1);
+	G2L["3"]["ClipsDescendants"] = true;
+	G2L["3"]["Size"] = UDim2.new(1, -8, 0, 22);
+	G2L["3"]["Position"] = UDim2.new(0.5, 0, 1, -5);
+	G2L["3"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["3"]["Name"] = [[CommandLine]];
 
 
-		-- StarterGui.ScreenGui.Console.CommandLine.UIStroke
-		G2L["4"] = Instance.new("UIStroke", G2L["3"]);
-		G2L["4"]["Transparency"] = 0.65;
-		G2L["4"]["Thickness"] = 1.25;
+	-- StarterGui.ScreenGui.Console.CommandLine.UIStroke
+	G2L["4"] = Instance.new("UIStroke", G2L["3"]);
+	G2L["4"]["Transparency"] = 0.65;
+	G2L["4"]["Thickness"] = 1.25;
 
 
-		-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame
-		G2L["5"] = Instance.new("ScrollingFrame", G2L["3"]);
-		G2L["5"]["Active"] = true;
-		G2L["5"]["ScrollingDirection"] = Enum.ScrollingDirection.X;
-		G2L["5"]["BorderSizePixel"] = 0;
-		G2L["5"]["CanvasSize"] = UDim2.new(0, 0, 0, 0);
-		G2L["5"]["ElasticBehavior"] = Enum.ElasticBehavior.Never;
-		G2L["5"]["TopImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
-		G2L["5"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["5"]["HorizontalScrollBarInset"] = Enum.ScrollBarInset.Always;
-		G2L["5"]["BottomImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
-		G2L["5"]["AutomaticCanvasSize"] = Enum.AutomaticSize.X;
-		G2L["5"]["Size"] = UDim2.new(1, 0, 1, 0);
-		G2L["5"]["ScrollBarImageColor3"] = Color3.fromRGB(57, 57, 57);
-		G2L["5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["5"]["ScrollBarThickness"] = 2;
-		G2L["5"]["BackgroundTransparency"] = 1;
+	-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame
+	G2L["5"] = Instance.new("ScrollingFrame", G2L["3"]);
+	G2L["5"]["Active"] = true;
+	G2L["5"]["ScrollingDirection"] = Enum.ScrollingDirection.X;
+	G2L["5"]["BorderSizePixel"] = 0;
+	G2L["5"]["CanvasSize"] = UDim2.new(0, 0, 0, 0);
+	G2L["5"]["ElasticBehavior"] = Enum.ElasticBehavior.Never;
+	G2L["5"]["TopImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
+	G2L["5"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["5"]["HorizontalScrollBarInset"] = Enum.ScrollBarInset.Always;
+	G2L["5"]["BottomImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
+	G2L["5"]["AutomaticCanvasSize"] = Enum.AutomaticSize.X;
+	G2L["5"]["Size"] = UDim2.new(1, 0, 1, 0);
+	G2L["5"]["ScrollBarImageColor3"] = Color3.fromRGB(57, 57, 57);
+	G2L["5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["5"]["ScrollBarThickness"] = 2;
+	G2L["5"]["BackgroundTransparency"] = 1;
 
-		-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame.TextBox
-		G2L["6"] = Instance.new("TextBox", G2L["5"]);
-		G2L["6"]["CursorPosition"] = -1;
-		G2L["6"]["TextXAlignment"] = Enum.TextXAlignment.Left;
-		G2L["6"]["PlaceholderColor3"] = Color3.fromRGB(211, 211, 211);
-		G2L["6"]["BorderSizePixel"] = 0;
-		G2L["6"]["TextSize"] = 13;
-		G2L["6"]["TextColor3"] = Color3.fromRGB(211, 211, 211);
-		G2L["6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["6"]["FontFace"] = Font.new([[rbxasset://fonts/families/Inconsolata.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-		G2L["6"]["AutomaticSize"] = Enum.AutomaticSize.X;
-		G2L["6"]["ClearTextOnFocus"] = false;
-		G2L["6"]["PlaceholderText"] = [[Run a command]];
-		G2L["6"]["Size"] = UDim2.new(0, 246, 0, 22);
-		G2L["6"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["6"]["Text"] = [[]];
-		G2L["6"]["BackgroundTransparency"] = 1;
-
-
-		-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame.TextBox.UIPadding
-		G2L["7"] = Instance.new("UIPadding", G2L["6"]);
-		G2L["7"]["PaddingLeft"] = UDim.new(0, 7);
+	-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame.TextBox
+	G2L["6"] = Instance.new("TextBox", G2L["5"]);
+	G2L["6"]["CursorPosition"] = -1;
+	G2L["6"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+	G2L["6"]["PlaceholderColor3"] = Color3.fromRGB(211, 211, 211);
+	G2L["6"]["BorderSizePixel"] = 0;
+	G2L["6"]["TextSize"] = 13;
+	G2L["6"]["TextColor3"] = Color3.fromRGB(211, 211, 211);
+	G2L["6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["6"]["FontFace"] = Font.new([[rbxasset://fonts/families/Inconsolata.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+	G2L["6"]["AutomaticSize"] = Enum.AutomaticSize.X;
+	G2L["6"]["ClearTextOnFocus"] = false;
+	G2L["6"]["PlaceholderText"] = [[Run a command]];
+	G2L["6"]["Size"] = UDim2.new(0, 246, 0, 22);
+	G2L["6"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["6"]["Text"] = [[]];
+	G2L["6"]["BackgroundTransparency"] = 1;
 
 
-		-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame.Highlight
-		G2L["8"] = Instance.new("TextLabel", G2L["5"]);
-		G2L["8"]["Interactable"] = false;
-		G2L["8"]["ZIndex"] = 2;
-		G2L["8"]["BorderSizePixel"] = 0;
-		G2L["8"]["TextSize"] = 13;
-		G2L["8"]["TextXAlignment"] = Enum.TextXAlignment.Left;
-		G2L["8"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["8"]["FontFace"] = Font.new([[rbxasset://fonts/families/Inconsolata.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-		G2L["8"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["8"]["BackgroundTransparency"] = 1;
-		G2L["8"]["RichText"] = true;
-		G2L["8"]["Size"] = UDim2.new(0, 246, 0, 22);
-		G2L["8"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["8"]["Text"] = [[]];
-		G2L["8"]["Selectable"] = true;
-		G2L["8"]["AutomaticSize"] = Enum.AutomaticSize.X;
-		G2L["8"]["Name"] = [[Highlight]];
+	-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame.TextBox.UIPadding
+	G2L["7"] = Instance.new("UIPadding", G2L["6"]);
+	G2L["7"]["PaddingLeft"] = UDim.new(0, 7);
 
 
-		-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame.Highlight.UIPadding
-		G2L["9"] = Instance.new("UIPadding", G2L["8"]);
-		G2L["9"]["PaddingLeft"] = UDim.new(0, 7);
+	-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame.Highlight
+	G2L["8"] = Instance.new("TextLabel", G2L["5"]);
+	G2L["8"]["Interactable"] = false;
+	G2L["8"]["ZIndex"] = 2;
+	G2L["8"]["BorderSizePixel"] = 0;
+	G2L["8"]["TextSize"] = 13;
+	G2L["8"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+	G2L["8"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["8"]["FontFace"] = Font.new([[rbxasset://fonts/families/Inconsolata.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+	G2L["8"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["8"]["BackgroundTransparency"] = 1;
+	G2L["8"]["RichText"] = true;
+	G2L["8"]["Size"] = UDim2.new(0, 246, 0, 22);
+	G2L["8"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["8"]["Text"] = [[]];
+	G2L["8"]["Selectable"] = true;
+	G2L["8"]["AutomaticSize"] = Enum.AutomaticSize.X;
+	G2L["8"]["Name"] = [[Highlight]];
 
 
-		-- StarterGui.ScreenGui.Console.Output
-		G2L["a"] = Instance.new("ScrollingFrame", ConsoleFrame);
-		G2L["a"]["Active"] = true;
-		G2L["a"]["BorderSizePixel"] = 0;
-		G2L["a"]["CanvasSize"] = UDim2.new(0, 0, 0, 0);
-		G2L["a"]["TopImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
-		G2L["a"]["BackgroundColor3"] = Color3.fromRGB(36, 36, 36);
-		G2L["a"]["Name"] = [[Output]];
-		G2L["a"]["ScrollBarImageTransparency"] = 0.6;
-		G2L["a"]["BottomImage"] = [[rbxasset://textures/ui/Scroll/scroll-middle.png]];
-		G2L["a"]["AnchorPoint"] = Vector2.new(0.5, 0);
-		G2L["a"]["AutomaticCanvasSize"] = Enum.AutomaticSize.Y;
-		G2L["a"]["Size"] = UDim2.new(1, -8, 1, -55);
-		G2L["a"]["Position"] = UDim2.new(0.5, 0, 0, 23);
-		G2L["a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["a"]["ScrollBarThickness"] = 6;
+	-- StarterGui.ScreenGui.Console.CommandLine.ScrollingFrame.Highlight.UIPadding
+	G2L["9"] = Instance.new("UIPadding", G2L["8"]);
+	G2L["9"]["PaddingLeft"] = UDim.new(0, 7);
+	
+	G2L["backgroundOutput"] = Instance.new("Frame", ConsoleFrame);
+	G2L["backgroundOutput"]["BorderSizePixel"] = 0;
+	G2L["backgroundOutput"]["BackgroundColor3"] = Color3.fromRGB(36, 36, 36);
+	G2L["backgroundOutput"]["Name"] = [[BackgroundOutput]];
+	G2L["backgroundOutput"]["AnchorPoint"] = Vector2.new(0, 0);
+	G2L["backgroundOutput"]["Size"] = UDim2.new(1, -8, 1, -55);
+	G2L["backgroundOutput"]["Position"] = UDim2.new(0, 4, 0, 23);
+	G2L["backgroundOutput"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["backgroundOutput"]["ZIndex"] = 1;
+	
+	local scrollbar = Lib.ScrollBar.new()
+	scrollbar.Gui.Parent = ConsoleFrame
+	scrollbar.Gui.Size = UDim2.new(0, 16, 1, -55);
+	scrollbar.Gui.Position = UDim2.new(1, -20,0, 23);
+	scrollbar.Gui.Up.ZIndex = 3
+	scrollbar.Gui.Down.ZIndex = 3
 
+	-- StarterGui.ScreenGui.Console.Output
+	G2L["a"] = Instance.new("ScrollingFrame", ConsoleFrame);
+	G2L["a"]["Active"] = true;
+	G2L["a"]["BorderSizePixel"] = 0;
+	G2L["a"]["CanvasSize"] = UDim2.new(0, 0, 0, 0);
+	G2L["a"]["TopImage"] = '';
+	G2L["a"]["BackgroundColor3"] = Color3.fromRGB(36, 36, 36);
+	G2L["a"].BackgroundTransparency = 1
+	G2L["a"]["Name"] = [[Output]];
+	G2L["a"]["ScrollBarImageTransparency"] = 0;
+	G2L["a"]["BottomImage"] = '';
+	G2L["a"]["AnchorPoint"] = Vector2.new(0, 0);
+	G2L["a"]["AutomaticCanvasSize"] = Enum.AutomaticSize.Y;
+	G2L["a"]["Size"] = UDim2.new(1, -8, 1, -55);
+	G2L["a"]["Position"] = UDim2.new(0, 4, 0, 23);
+	G2L["a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["a"].ScrollBarImageColor3 = Color3.fromRGB(70, 70, 70)
+	G2L["a"]["ScrollBarThickness"] = 16;
+	G2L["a"]["ZIndex"] = 1;
 
-		-- StarterGui.ScreenGui.Console.Output.UIListLayout
-		G2L["b"] = Instance.new("UIListLayout", G2L["a"]);
-		G2L["b"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+	
 
-
-		-- StarterGui.ScreenGui.Console.Output.UIStroke
-		G2L["c"] = Instance.new("UIStroke", G2L["a"]);
-		G2L["c"]["Transparency"] = 0.7;
-		G2L["c"]["Thickness"] = 1.25;
-		G2L["c"]["Color"] = Color3.fromRGB(12, 12, 12);
-
-
-		-- StarterGui.ScreenGui.Console.Output.OutputTextSize
-		G2L["d"] = Instance.new("NumberValue", G2L["a"]);
-		G2L["d"]["Name"] = [[OutputTextSize]];
-		G2L["d"]["Value"] = 15;
-
-
-		-- StarterGui.ScreenGui.Console.Output.OutputLimit
-		G2L["e"] = Instance.new("NumberValue", G2L["a"]);
-		G2L["e"]["Name"] = [[OutputLimit]];
-		G2L["e"]["Value"] = OutputLimit;
-
-
-		-- StarterGui.ScreenGui.Console.Output.UIPadding
-		G2L["f"] = Instance.new("UIPadding", G2L["a"]);
-		G2L["f"]["PaddingTop"] = UDim.new(0, 2);
-
-
-		-- StarterGui.ScreenGui.Console.TextSizeBox
-		G2L["10"] = Instance.new("Frame", ConsoleFrame);
-		G2L["10"]["BorderSizePixel"] = 0;
-		G2L["10"]["BackgroundColor3"] = Color3.fromRGB(37, 37, 37);
-		G2L["10"]["ClipsDescendants"] = true;
-		G2L["10"]["Size"] = UDim2.new(0, 37, 0, 15);
-		G2L["10"]["Position"] = UDim2.new(0, 4, 0, 4);
-		G2L["10"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["10"]["Name"] = [[TextSizeBox]];
-
-
-		-- StarterGui.ScreenGui.Console.TextSizeBox.TextBox
-		G2L["11"] = Instance.new("TextBox", G2L["10"]);
-		G2L["11"]["PlaceholderColor3"] = Color3.fromRGB(108, 108, 108);
-		G2L["11"]["BorderSizePixel"] = 0;
-		G2L["11"]["TextWrapped"] = true;
-		G2L["11"]["TextSize"] = 15;
-		G2L["11"]["TextColor3"] = Color3.fromRGB(211, 211, 211);
-		G2L["11"]["TextScaled"] = true;
-		G2L["11"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["11"]["FontFace"] = Font.new([[rbxasset://fonts/families/Inconsolata.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-		G2L["11"]["PlaceholderText"] = [[Size]];
-		G2L["11"]["Size"] = UDim2.new(1, 0, 1, 0);
-		G2L["11"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["11"]["Text"] = [[]];
-		G2L["11"]["BackgroundTransparency"] = 1;
-
-
-		-- StarterGui.ScreenGui.Console.TextSizeBox.TextBox.UIPadding
-		G2L["12"] = Instance.new("UIPadding", G2L["11"]);
-		G2L["12"]["PaddingTop"] = UDim.new(0, 2);
-		G2L["12"]["PaddingRight"] = UDim.new(0, 5);
-		G2L["12"]["PaddingLeft"] = UDim.new(0, 5);
-		G2L["12"]["PaddingBottom"] = UDim.new(0, 2);
-
-
-		-- StarterGui.ScreenGui.Console.TextSizeBox.UIStroke
-		G2L["13"] = Instance.new("UIStroke", G2L["10"]);
-		G2L["13"]["Transparency"] = 0.65;
-		G2L["13"]["Thickness"] = 1.25;
-
-
-		-- StarterGui.ScreenGui.Console.Clear
-		G2L["14"] = Instance.new("ImageButton", ConsoleFrame);
-		G2L["14"]["BorderSizePixel"] = 0;
-		G2L["14"]["BackgroundColor3"] = Color3.fromRGB(57, 57, 57);
-		G2L["14"]["Size"] = UDim2.new(0, 37, 0, 15);
-		G2L["14"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["14"]["Name"] = [[Clear]];
-		G2L["14"]["Position"] = UDim2.new(1, -42, 0, 4);
-
-
-		-- StarterGui.ScreenGui.Console.Clear.TextLabel
-		G2L["15"] = Instance.new("TextLabel", G2L["14"]);
-		G2L["15"]["TextWrapped"] = true;
-		G2L["15"]["Interactable"] = false;
-		G2L["15"]["BorderSizePixel"] = 0;
-		G2L["15"]["TextSize"] = 20;
-		G2L["15"]["TextScaled"] = true;
-		G2L["15"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["15"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-		G2L["15"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["15"]["BackgroundTransparency"] = 1;
-		G2L["15"]["Size"] = UDim2.new(1, 0, 1, 0);
-		G2L["15"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["15"]["Text"] = [[Clear]];
-
-
-		-- StarterGui.ScreenGui.Console.Clear.UIPadding
-		G2L["16"] = Instance.new("UIPadding", G2L["14"]);
-		G2L["16"]["PaddingTop"] = UDim.new(0, 1);
-		G2L["16"]["PaddingBottom"] = UDim.new(0, 1);
-
-
-		-- StarterGui.ScreenGui.Console.OutputTemplate
-		G2L["17"] = Instance.new("TextBox", ConsoleFrame);
-		G2L["17"]["Visible"] = false;
-		G2L["17"]["Active"] = false;
-		G2L["17"]["Name"] = [[OutputTemplate]];
-		G2L["17"]["TextXAlignment"] = Enum.TextXAlignment.Left;
-		G2L["17"]["BorderSizePixel"] = 0;
-		G2L["17"]["TextEditable"] = false;
-		G2L["17"]["TextWrapped"] = true;
-		G2L["17"]["TextSize"] = 15;
-		G2L["17"]["TextColor3"] = Color3.fromRGB(171, 171, 171);
-		G2L["17"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["17"]["RichText"] = true;
-		G2L["17"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-		G2L["17"]["AutomaticSize"] = Enum.AutomaticSize.Y;
-		G2L["17"]["Selectable"] = false;
-		G2L["17"]["ClearTextOnFocus"] = false;
-		G2L["17"]["Size"] = UDim2.new(1, 0, 0, 1);
-		G2L["17"]["Position"] = UDim2.new(0, 20, 0, 0);
-		G2L["17"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["17"]["Text"] = [[(timestamp) <font color="rgb(255, 255, 255)">Output</font>]];
-		G2L["17"]["BackgroundTransparency"] = 1;
-
-
-		-- StarterGui.ScreenGui.Console.OutputTemplate.UIPadding
-		G2L["18"] = Instance.new("UIPadding", G2L["17"]);
-		G2L["18"]["PaddingRight"] = UDim.new(0, 6);
-		G2L["18"]["PaddingLeft"] = UDim.new(0, 6);
-
-
-		-- StarterGui.ScreenGui.Console.CtrlScroll
-		G2L["19"] = Instance.new("ImageButton", ConsoleFrame);
-		G2L["19"]["BorderSizePixel"] = 0;
-		G2L["19"]["BackgroundColor3"] = Color3.fromRGB(57, 57, 57);
-		G2L["19"]["Size"] = UDim2.new(0, 60, 0, 15);
-		G2L["19"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["19"]["Name"] = [[CtrlScroll]];
-		G2L["19"]["Position"] = UDim2.new(0, 46, 0, 4);
-
-
-		-- StarterGui.ScreenGui.Console.CtrlScroll.TextLabel
-		G2L["1a"] = Instance.new("TextLabel", G2L["19"]);
-		G2L["1a"]["TextWrapped"] = true;
-		G2L["1a"]["Interactable"] = false;
-		G2L["1a"]["BorderSizePixel"] = 0;
-		G2L["1a"]["TextSize"] = 20;
-		G2L["1a"]["TextScaled"] = true;
-		G2L["1a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["1a"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
-		G2L["1a"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
-		G2L["1a"]["BackgroundTransparency"] = 1;
-		G2L["1a"]["Size"] = UDim2.new(1, 0, 1, 0);
-		G2L["1a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-		G2L["1a"]["Text"] = [[Ctrl Scroll]];
-
-
-		-- StarterGui.ScreenGui.Console.CtrlScroll.UIPadding
-		G2L["1b"] = Instance.new("UIPadding", G2L["19"]);
-		G2L["1b"]["PaddingTop"] = UDim.new(0, 1);
-		G2L["1b"]["PaddingBottom"] = UDim.new(0, 1);
-
-
-		-- StarterGui.ScreenGui.ConsoleHandler
-		G2L["1c"] = Instance.new("LocalScript", G2L["1"]);
-		G2L["1c"]["Name"] = [[ConsoleHandler]];
-
-
-		-- StarterGui.ScreenGui.ConsoleHandler.SyntaxHighlighter
-		G2L["1d"] = Instance.new("ModuleScript", G2L["1c"]);
-		G2L["1d"]["Name"] = [[SyntaxHighlighter]];
-
-
-		-- Require G2L wrapper
-		local G2L_REQUIRE = require;
-		local G2L_MODULES = {};
-		local function require(Module:ModuleScript)
-			local ModuleState = G2L_MODULES[Module];
-			if ModuleState then
-				if not ModuleState.Required then
-					ModuleState.Required = true;
-					ModuleState.Value = ModuleState.Closure();
-				end
-				return ModuleState.Value;
-			end;
-			return G2L_REQUIRE(Module);
+	G2L["a"]:GetPropertyChangedSignal("AbsoluteWindowSize"):Connect(function()
+		if G2L["a"].AbsoluteCanvasSize ~= G2L["a"].AbsoluteWindowSize then
+			scrollbar.Gui.Visible = true
+		else
+			scrollbar.Gui.Visible = false
 		end
+	end)
 
-		G2L_MODULES[G2L["1d"]] = {
-			Closure = function()
-				local script = G2L["1d"];local highlighter = {}
-				local keywords = {
-					lua = {
-						"and", "break", "or", "else", "elseif", "if", "then", "until", "repeat", "while", "do", "for", "in", "end",
-						"local", "return", "function", "export"
-					},
-					rbx = {
-						"game", "workspace", "script", "math", "string", "table", "task", "wait", "select", "next", "Enum",
-						"error", "warn", "tick", "assert", "shared", "loadstring", "tonumber", "tostring", "type",
-						"typeof", "unpack", "print", "Instance", "CFrame", "Vector3", "Vector2", "Color3", "UDim", "UDim2", "Ray", "BrickColor",
-						"OverlapParams", "RaycastParams", "Axes", "Random", "Region3", "Rect", "TweenInfo",
-						"collectgarbage", "not", "utf8", "pcall", "xpcall", "_G", "setmetatable", "getmetatable", "os", "pairs", "ipairs"
-					},
-					exploit = {
-						"hookmetamethod", "hookfunction", "getgc", "filtergc", "Drawing", "getgenv", "getsenv", "getrenv", "getfenv", "setfenv",
-						"decompile", "saveinstance", "getrawmetatable", "setrawmetatable", "checkcaller", "cloneref", "clonefunction",
-						"iscclosure", "islclosure", "isexecutorclosure", "newcclosure", "getfunctionhash", "crypt", "writefile", "appendfile", "loadfile", "readfile", "listfiles",
-						"makefolder", "isfolder", "isfile", "delfile", "delfolder", "getcustomasset", "fireclickdetector", "firetouchinterest", "fireproximityprompt"
-					},
-					operators = {
-						"#", "+", "-", "*", "%", "/", "^", "=", "~", "=", "<", ">", ",", ".", "(", ")", "{", "}", "[", "]", ";", ":"
-					}
+	-- StarterGui.ScreenGui.Console.Output.UIListLayout
+	G2L["b"] = Instance.new("UIListLayout", G2L["a"]);
+	G2L["b"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+	-- StarterGui.ScreenGui.Console.Output.UIStroke
+	G2L["c"] = Instance.new("UIStroke", G2L["a"]);
+	G2L["c"]["Transparency"] = 0.7;
+	G2L["c"]["Thickness"] = 1.25;
+	G2L["c"]["Color"] = Color3.fromRGB(12, 12, 12);
+
+
+	-- StarterGui.ScreenGui.Console.Output.OutputTextSize
+	G2L["d"] = Instance.new("NumberValue", G2L["a"]);
+	G2L["d"]["Name"] = [[OutputTextSize]];
+	G2L["d"]["Value"] = 15;
+
+
+	-- StarterGui.ScreenGui.Console.Output.OutputLimit
+	G2L["e"] = Instance.new("NumberValue", G2L["a"]);
+	G2L["e"]["Name"] = [[OutputLimit]];
+	G2L["e"]["Value"] = OutputLimit;
+
+
+	-- StarterGui.ScreenGui.Console.Output.UIPadding
+	G2L["f"] = Instance.new("UIPadding", G2L["a"]);
+	G2L["f"]["PaddingTop"] = UDim.new(0, 2);
+
+
+	-- StarterGui.ScreenGui.Console.TextSizeBox
+	G2L["10"] = Instance.new("Frame", ConsoleFrame);
+	G2L["10"]["BorderSizePixel"] = 0;
+	G2L["10"]["BackgroundColor3"] = Color3.fromRGB(37, 37, 37);
+	G2L["10"]["ClipsDescendants"] = true;
+	G2L["10"]["Size"] = UDim2.new(0, 37, 0, 15);
+	G2L["10"]["Position"] = UDim2.new(0, 4, 0, 4);
+	G2L["10"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["10"]["Name"] = [[TextSizeBox]];
+
+
+	-- StarterGui.ScreenGui.Console.TextSizeBox.TextBox
+	G2L["11"] = Instance.new("TextBox", G2L["10"]);
+	G2L["11"]["PlaceholderColor3"] = Color3.fromRGB(108, 108, 108);
+	G2L["11"]["BorderSizePixel"] = 0;
+	G2L["11"]["TextWrapped"] = true;
+	G2L["11"]["TextSize"] = 15;
+	G2L["11"]["TextColor3"] = Color3.fromRGB(211, 211, 211);
+	G2L["11"]["TextScaled"] = true;
+	G2L["11"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["11"]["FontFace"] = Font.new([[rbxasset://fonts/families/Inconsolata.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+	G2L["11"]["PlaceholderText"] = [[Size]];
+	G2L["11"]["Size"] = UDim2.new(1, 0, 1, 0);
+	G2L["11"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["11"]["Text"] = [[]];
+	G2L["11"]["BackgroundTransparency"] = 1;
+
+
+	-- StarterGui.ScreenGui.Console.TextSizeBox.TextBox.UIPadding
+	G2L["12"] = Instance.new("UIPadding", G2L["11"]);
+	G2L["12"]["PaddingTop"] = UDim.new(0, 2);
+	G2L["12"]["PaddingRight"] = UDim.new(0, 5);
+	G2L["12"]["PaddingLeft"] = UDim.new(0, 5);
+	G2L["12"]["PaddingBottom"] = UDim.new(0, 2);
+
+
+	-- StarterGui.ScreenGui.Console.TextSizeBox.UIStroke
+	G2L["13"] = Instance.new("UIStroke", G2L["10"]);
+	G2L["13"]["Transparency"] = 0.65;
+	G2L["13"]["Thickness"] = 1.25;
+
+
+	-- StarterGui.ScreenGui.Console.Clear
+	G2L["14"] = Instance.new("ImageButton", ConsoleFrame);
+	G2L["14"]["BorderSizePixel"] = 0;
+	G2L["14"]["BackgroundColor3"] = Color3.fromRGB(57, 57, 57);
+	G2L["14"]["Size"] = UDim2.new(0, 37, 0, 15);
+	G2L["14"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["14"]["Name"] = [[Clear]];
+	G2L["14"]["Position"] = UDim2.new(1, -42, 0, 4);
+
+
+	-- StarterGui.ScreenGui.Console.Clear.TextLabel
+	G2L["15"] = Instance.new("TextLabel", G2L["14"]);
+	G2L["15"]["TextWrapped"] = true;
+	G2L["15"]["Interactable"] = false;
+	G2L["15"]["BorderSizePixel"] = 0;
+	G2L["15"]["TextSize"] = 20;
+	G2L["15"]["TextScaled"] = true;
+	G2L["15"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["15"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+	G2L["15"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["15"]["BackgroundTransparency"] = 1;
+	G2L["15"]["Size"] = UDim2.new(1, 0, 1, 0);
+	G2L["15"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["15"]["Text"] = [[Clear]];
+
+
+	-- StarterGui.ScreenGui.Console.Clear.UIPadding
+	G2L["16"] = Instance.new("UIPadding", G2L["14"]);
+	G2L["16"]["PaddingTop"] = UDim.new(0, 1);
+	G2L["16"]["PaddingBottom"] = UDim.new(0, 1);
+
+
+	-- StarterGui.ScreenGui.Console.OutputTemplate
+	G2L["17"] = Instance.new("TextBox", ConsoleFrame);
+	G2L["17"]["Visible"] = false;
+	G2L["17"]["Active"] = false;
+	G2L["17"]["Name"] = [[OutputTemplate]];
+	G2L["17"]["TextXAlignment"] = Enum.TextXAlignment.Left;
+	G2L["17"]["BorderSizePixel"] = 0;
+	G2L["17"]["TextEditable"] = false;
+	G2L["17"]["TextWrapped"] = true;
+	G2L["17"]["TextSize"] = 15;
+	G2L["17"]["TextColor3"] = Color3.fromRGB(171, 171, 171);
+	G2L["17"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["17"]["RichText"] = true;
+	G2L["17"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+	G2L["17"]["AutomaticSize"] = Enum.AutomaticSize.Y;
+	G2L["17"]["Selectable"] = false;
+	G2L["17"]["ClearTextOnFocus"] = false;
+	G2L["17"]["Size"] = UDim2.new(1, 0, 0, 1);
+	G2L["17"]["Position"] = UDim2.new(0, 20, 0, 0);
+	G2L["17"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["17"]["Text"] = [[(timestamp) <font color="rgb(255, 255, 255)">Output</font>]];
+	G2L["17"]["BackgroundTransparency"] = 1;
+
+
+	-- StarterGui.ScreenGui.Console.OutputTemplate.UIPadding
+	G2L["18"] = Instance.new("UIPadding", G2L["17"]);
+	G2L["18"]["PaddingRight"] = UDim.new(0, 6);
+	G2L["18"]["PaddingLeft"] = UDim.new(0, 6);
+
+
+	-- StarterGui.ScreenGui.Console.CtrlScroll
+	G2L["19"] = Instance.new("ImageButton", ConsoleFrame);
+	G2L["19"]["BorderSizePixel"] = 0;
+	G2L["19"]["BackgroundColor3"] = Color3.fromRGB(57, 57, 57);
+	G2L["19"]["Size"] = UDim2.new(0, 60, 0, 15);
+	G2L["19"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["19"]["Name"] = [[CtrlScroll]];
+	G2L["19"]["Position"] = UDim2.new(0, 46, 0, 4);
+
+
+	-- StarterGui.ScreenGui.Console.CtrlScroll.TextLabel
+	G2L["1a"] = Instance.new("TextLabel", G2L["19"]);
+	G2L["1a"]["TextWrapped"] = true;
+	G2L["1a"]["Interactable"] = false;
+	G2L["1a"]["BorderSizePixel"] = 0;
+	G2L["1a"]["TextSize"] = 20;
+	G2L["1a"]["TextScaled"] = true;
+	G2L["1a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["1a"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+	G2L["1a"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["1a"]["BackgroundTransparency"] = 1;
+	G2L["1a"]["Size"] = UDim2.new(1, 0, 1, 0);
+	G2L["1a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["1a"]["Text"] = [[Ctrl Scroll]];
+
+
+	-- StarterGui.ScreenGui.Console.CtrlScroll.UIPadding
+	G2L["1b"] = Instance.new("UIPadding", G2L["19"]);
+	G2L["1b"]["PaddingTop"] = UDim.new(0, 1);
+	G2L["1b"]["PaddingBottom"] = UDim.new(0, 1);
+
+
+	-- StarterGui.ScreenGui.ConsoleHandler
+	G2L["1c"] = Instance.new("LocalScript", G2L["1"]);
+	G2L["1c"]["Name"] = [[ConsoleHandler]];
+
+
+	-- StarterGui.ScreenGui.ConsoleHandler.SyntaxHighlighter
+	G2L["1d"] = Instance.new("ModuleScript", G2L["1c"]);
+	G2L["1d"]["Name"] = [[SyntaxHighlighter]];
+	
+	
+	-- Require G2L wrapper
+	local G2L_REQUIRE = require;
+	local G2L_MODULES = {};
+	local function require(Module:ModuleScript)
+		local ModuleState = G2L_MODULES[Module];
+		if ModuleState then
+			if not ModuleState.Required then
+				ModuleState.Required = true;
+				ModuleState.Value = ModuleState.Closure();
+			end
+			return ModuleState.Value;
+		end;
+		return G2L_REQUIRE(Module);
+	end
+
+	G2L_MODULES[G2L["1d"]] = {
+		Closure = function()
+			local script = G2L["1d"];local highlighter = {}
+			local keywords = {
+				lua = {
+					"and", "break", "or", "else", "elseif", "if", "then", "until", "repeat", "while", "do", "for", "in", "end",
+					"local", "return", "function", "export"
+				},
+				rbx = {
+					"game", "workspace", "script", "math", "string", "table", "task", "wait", "select", "next", "Enum",
+					"error", "warn", "tick", "assert", "shared", "loadstring", "tonumber", "tostring", "type",
+					"typeof", "unpack", "print", "Instance", "CFrame", "Vector3", "Vector2", "Color3", "UDim", "UDim2", "Ray", "BrickColor",
+					"OverlapParams", "RaycastParams", "Axes", "Random", "Region3", "Rect", "TweenInfo",
+					"collectgarbage", "not", "utf8", "pcall", "xpcall", "_G", "setmetatable", "getmetatable", "os", "pairs", "ipairs"
+				},
+				exploit = {
+					"hookmetamethod", "hookfunction", "getgc", "filtergc", "Drawing", "getgenv", "getsenv", "getrenv", "getfenv", "setfenv",
+					"decompile", "saveinstance", "getrawmetatable", "setrawmetatable", "checkcaller", "cloneref", "clonefunction",
+					"iscclosure", "islclosure", "isexecutorclosure", "newcclosure", "getfunctionhash", "crypt", "writefile", "appendfile", "loadfile", "readfile", "listfiles",
+					"makefolder", "isfolder", "isfile", "delfile", "delfolder", "getcustomasset", "fireclickdetector", "firetouchinterest", "fireproximityprompt"
+				},
+				operators = {
+					"#", "+", "-", "*", "%", "/", "^", "=", "~", "=", "<", ">", ",", ".", "(", ")", "{", "}", "[", "]", ";", ":"
 				}
+			}
 
-				local colors = {
-					numbers = Color3.fromRGB(255, 198, 0),
-					boolean = Color3.fromRGB(255, 198, 0),
-					operator = Color3.fromRGB(204, 204, 204),
-					lua = Color3.fromRGB(132, 214, 247),
-					exploit = Color3.fromRGB(171, 84, 247),
-					rbx = Color3.fromRGB(248, 109, 124),
-					str = Color3.fromRGB(173, 241, 132),
-					comment = Color3.fromRGB(102, 102, 102),
-					null = Color3.fromRGB(255, 198, 0),
-					call = Color3.fromRGB(253, 251, 172),
-					self_call = Color3.fromRGB(253, 251, 172),
-					local_color = Color3.fromRGB(248, 109, 115),
-					function_color = Color3.fromRGB(248, 109, 115),
-					self_color = Color3.fromRGB(248, 109, 115),
-					local_property = Color3.fromRGB(97, 161, 241),
-				}
+			local colors = {
+				numbers = Color3.fromRGB(255, 198, 0),
+				boolean = Color3.fromRGB(255, 198, 0),
+				operator = Color3.fromRGB(204, 204, 204),
+				lua = Color3.fromRGB(132, 214, 247),
+				exploit = Color3.fromRGB(171, 84, 247),
+				rbx = Color3.fromRGB(248, 109, 124),
+				str = Color3.fromRGB(173, 241, 132),
+				comment = Color3.fromRGB(102, 102, 102),
+				null = Color3.fromRGB(255, 198, 0),
+				call = Color3.fromRGB(253, 251, 172),
+				self_call = Color3.fromRGB(253, 251, 172),
+				local_color = Color3.fromRGB(248, 109, 115),
+				function_color = Color3.fromRGB(248, 109, 115),
+				self_color = Color3.fromRGB(248, 109, 115),
+				local_property = Color3.fromRGB(97, 161, 241),
+			}
 
-				local function createKeywordSet(keywords)
-					local keywordSet = {}
-					for _, keyword in ipairs(keywords) do
-						keywordSet[keyword] = true
-					end
-					return keywordSet
+			local function createKeywordSet(keywords)
+				local keywordSet = {}
+				for _, keyword in ipairs(keywords) do
+					keywordSet[keyword] = true
 				end
-
-				local luaSet = createKeywordSet(keywords.lua)
-				local exploitSet = createKeywordSet(keywords.exploit)
-				local rbxSet = createKeywordSet(keywords.rbx)
-				local operatorsSet = createKeywordSet(keywords.operators)
-
-				local function getHighlight(tokens, index)
-					local token = tokens[index]
-
-					if colors[token .. "_color"] then
-						return colors[token .. "_color"]
-					end
-
-					if tonumber(token) then
-						return colors.numbers
-					elseif token == "nil" then
-						return colors.null
-					elseif token:sub(1, 2) == "--" then
-						return colors.comment
-					elseif operatorsSet[token] then
-						return colors.operator
-					elseif luaSet[token] then
-						return colors.rbx
-					elseif rbxSet[token] then
-						return colors.lua
-					elseif exploitSet[token] then
-						return colors.exploit
-					elseif token:sub(1, 1) == "\"" or token:sub(1, 1) == "\'" then
-						return colors.str
-					elseif token == "true" or token == "false" then
-						return colors.boolean
-					end
-
-					if tokens[index + 1] == "(" then
-						if tokens[index - 1] == ":" then
-							return colors.self_call
-						end
-
-						return colors.call
-					end
-
-					if tokens[index - 1] == "." then
-						if tokens[index - 2] == "Enum" then
-							return colors.rbx
-						end
-
-						return colors.local_property
-					end
-				end
-
-				function highlighter.run(source)
-					local tokens = {}
-					local currentToken = ""
-
-					local inString = false
-					local inComment = false
-					local commentPersist = false
-
-					for i = 1, #source do
-						local character = source:sub(i, i)
-
-						if inComment then
-							if character == "\n" and not commentPersist then
-								table.insert(tokens, currentToken)
-								table.insert(tokens, character)
-								currentToken = ""
-
-								inComment = false
-							elseif source:sub(i - 1, i) == "]]" and commentPersist then
-								currentToken ..= "]"
-
-								table.insert(tokens, currentToken)
-								currentToken = ""
-
-								inComment = false
-								commentPersist = false
-							else
-								currentToken = currentToken .. character
-							end
-						elseif inString then
-							if character == inString and source:sub(i-1, i-1) ~= "\\" or character == "\n" then
-								currentToken = currentToken .. character
-								inString = false
-							else
-								currentToken = currentToken .. character
-							end
-						else
-							if source:sub(i, i + 1) == "--" then
-								table.insert(tokens, currentToken)
-								currentToken = "-"
-								inComment = true
-								commentPersist = source:sub(i + 2, i + 3) == "[["
-							elseif character == "\"" or character == "\'" then
-								table.insert(tokens, currentToken)
-								currentToken = character
-								inString = character
-							elseif operatorsSet[character] then
-								table.insert(tokens, currentToken)
-								table.insert(tokens, character)
-								currentToken = ""
-							elseif character:match("[%w_]") then
-								currentToken = currentToken .. character
-							else
-								table.insert(tokens, currentToken)
-								table.insert(tokens, character)
-								currentToken = ""
-							end
-						end
-					end
-
-					table.insert(tokens, currentToken)
-
-					local highlighted = {}
-
-					for i, token in ipairs(tokens) do
-						local highlight = getHighlight(tokens, i)
-
-						if highlight then
-							local syntax = string.format("<font color = \"#%s\">%s</font>", highlight:ToHex(), token:gsub("<", "&lt;"):gsub(">", "&gt;"))
-
-							table.insert(highlighted, syntax)
-						else
-							table.insert(highlighted, token)
-						end
-					end
-
-					return table.concat(highlighted)
-				end
-
-				return highlighter
-			end;
-		};
-		-- StarterGui.ScreenGui.ConsoleHandler
-		local function C_1c()
-			local script = G2L["1c"];
-			
-			local CtrlScroll = false
-
-			local LogService = game:GetService("LogService")
-			local Players = game:GetService("Players")
-			local LocalPlayer = Players.LocalPlayer
-			local Mouse = LocalPlayer:GetMouse()
-			local UserInputService = game:GetService("UserInputService")
-			local RunService = game:GetService("RunService")
-
-			local Console = ConsoleFrame
-			local SyntaxHighlightingModule = require(script.SyntaxHighlighter)
-			local OutputTextSize = Console.Output.OutputTextSize
-
-			local function Tween(obj, info, prop)
-				local tween = game:GetService("TweenService"):Create(obj, info, prop)
-				tween:Play()
-				return tween
+				return keywordSet
 			end
 
+			local luaSet = createKeywordSet(keywords.lua)
+			local exploitSet = createKeywordSet(keywords.exploit)
+			local rbxSet = createKeywordSet(keywords.rbx)
+			local operatorsSet = createKeywordSet(keywords.operators)
+
+			local function getHighlight(tokens, index)
+				local token = tokens[index]
+
+				if colors[token .. "_color"] then
+					return colors[token .. "_color"]
+				end
+
+				if tonumber(token) then
+					return colors.numbers
+				elseif token == "nil" then
+					return colors.null
+				elseif token:sub(1, 2) == "--" then
+					return colors.comment
+				elseif operatorsSet[token] then
+					return colors.operator
+				elseif luaSet[token] then
+					return colors.rbx
+				elseif rbxSet[token] then
+					return colors.lua
+				elseif exploitSet[token] then
+					return colors.exploit
+				elseif token:sub(1, 1) == "\"" or token:sub(1, 1) == "\'" then
+					return colors.str
+				elseif token == "true" or token == "false" then
+					return colors.boolean
+				end
+
+				if tokens[index + 1] == "(" then
+					if tokens[index - 1] == ":" then
+						return colors.self_call
+					end
+
+					return colors.call
+				end
+
+				if tokens[index - 1] == "." then
+					if tokens[index - 2] == "Enum" then
+						return colors.rbx
+					end
+
+					return colors.local_property
+				end
+			end
+
+			function highlighter.run(source)
+				local tokens = {}
+				local currentToken = ""
+
+				local inString = false
+				local inComment = false
+				local commentPersist = false
+
+				for i = 1, #source do
+					local character = source:sub(i, i)
+
+					if inComment then
+						if character == "\n" and not commentPersist then
+							table.insert(tokens, currentToken)
+							table.insert(tokens, character)
+							currentToken = ""
+
+							inComment = false
+						elseif source:sub(i - 1, i) == "]]" and commentPersist then
+							currentToken ..= "]"
+
+							table.insert(tokens, currentToken)
+							currentToken = ""
+
+							inComment = false
+							commentPersist = false
+						else
+							currentToken = currentToken .. character
+						end
+					elseif inString then
+						if character == inString and source:sub(i-1, i-1) ~= "\\" or character == "\n" then
+							currentToken = currentToken .. character
+							inString = false
+						else
+							currentToken = currentToken .. character
+						end
+					else
+						if source:sub(i, i + 1) == "--" then
+							table.insert(tokens, currentToken)
+							currentToken = "-"
+							inComment = true
+							commentPersist = source:sub(i + 2, i + 3) == "[["
+						elseif character == "\"" or character == "\'" then
+							table.insert(tokens, currentToken)
+							currentToken = character
+							inString = character
+						elseif operatorsSet[character] then
+							table.insert(tokens, currentToken)
+							table.insert(tokens, character)
+							currentToken = ""
+						elseif character:match("[%w_]") then
+							currentToken = currentToken .. character
+						else
+							table.insert(tokens, currentToken)
+							table.insert(tokens, character)
+							currentToken = ""
+						end
+					end
+				end
+
+				table.insert(tokens, currentToken)
+
+				local highlighted = {}
+
+				for i, token in ipairs(tokens) do
+					local highlight = getHighlight(tokens, i)
+
+					if highlight then
+						local syntax = string.format("<font color = \"#%s\">%s</font>", highlight:ToHex(), token:gsub("<", "&lt;"):gsub(">", "&gt;"))
+
+						table.insert(highlighted, syntax)
+					else
+						table.insert(highlighted, token)
+					end
+				end
+
+				return table.concat(highlighted)
+			end
+
+			return highlighter
+		end;
+	};
+	
+	Console.Init = function()
+		-- StarterGui.ScreenGui.ConsoleHandler
+		local script = G2L["1c"];
+
+		local CtrlScroll = false
+
+		local LogService = game:GetService("LogService")
+		local Players = game:GetService("Players")
+		local LocalPlayer = Players.LocalPlayer
+		local Mouse = LocalPlayer:GetMouse()
+		local UserInputService = game:GetService("UserInputService")
+		local RunService = game:GetService("RunService")
+
+		local Console = ConsoleFrame
+		local SyntaxHighlightingModule = require(script.SyntaxHighlighter)
+		local OutputTextSize = Console.Output.OutputTextSize
+
+		local function Tween(obj, info, prop)
+			local tween = game:GetService("TweenService"):Create(obj, info, prop)
+			tween:Play()
+			return tween
+		end
 
 
-			-- MOUSE STUFFS
 
+		-- MOUSE STUFFS
+
+		if CtrlScroll == true then
+			Console.CtrlScroll.BackgroundColor3 = Color3.fromRGB(11, 90, 175)
+		elseif CtrlScroll == false then
+			Console.CtrlScroll.BackgroundColor3 = Color3.fromRGB(56, 56, 56)
+		end
+		Console.CtrlScroll.MouseButton1Click:Connect(function()
+			CtrlScroll = not CtrlScroll
 			if CtrlScroll == true then
 				Console.CtrlScroll.BackgroundColor3 = Color3.fromRGB(11, 90, 175)
 			elseif CtrlScroll == false then
 				Console.CtrlScroll.BackgroundColor3 = Color3.fromRGB(56, 56, 56)
 			end
-			Console.CtrlScroll.MouseButton1Click:Connect(function()
-				CtrlScroll = not CtrlScroll
-				if CtrlScroll == true then
-					Console.CtrlScroll.BackgroundColor3 = Color3.fromRGB(11, 90, 175)
-				elseif CtrlScroll == false then
-					Console.CtrlScroll.BackgroundColor3 = Color3.fromRGB(56, 56, 56)
-				end
-			end)
+		end)
 
-			local IsHoldingCTRL = false
-			UserInputService.InputBegan:Connect(function(input, gameproc)
-				if not gameproc then
-					if input.KeyCode == Enum.KeyCode.LeftControl or input.KeyCode == Enum.KeyCode.RightControl then
-						IsHoldingCTRL = true
-					end
+		local IsHoldingCTRL = false
+		UserInputService.InputBegan:Connect(function(input, gameproc)
+			if not gameproc then
+				if input.KeyCode == Enum.KeyCode.LeftControl or input.KeyCode == Enum.KeyCode.RightControl then
+					IsHoldingCTRL = true
 				end
-			end)
-			UserInputService.InputEnded:Connect(function(input, gameproc)
-				if not gameproc then
-					if input.KeyCode == Enum.KeyCode.LeftControl or input.KeyCode == Enum.KeyCode.RightControl then
-						IsHoldingCTRL = false
-					end
+			end
+		end)
+		UserInputService.InputEnded:Connect(function(input, gameproc)
+			if not gameproc then
+				if input.KeyCode == Enum.KeyCode.LeftControl or input.KeyCode == Enum.KeyCode.RightControl then
+					IsHoldingCTRL = false
 				end
-			end)
-			-- Console part
-			local displayedOutput = {}
-			local OutputLimit = Console.Output.OutputLimit
+			end
+		end)
+		-- Console part
+		local displayedOutput = {}
+		local OutputLimit = Console.Output.OutputLimit
 
+		Console.TextSizeBox.TextBox.Text = tostring(OutputTextSize.Value)
+
+		Console.TextSizeBox.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+			local tonum = tonumber(Console.TextSizeBox.TextBox.Text)
+			if tonum then
+				OutputTextSize.Value = tonum
+			end
+		end)
+		OutputTextSize:GetPropertyChangedSignal("Value"):Connect(function()
 			Console.TextSizeBox.TextBox.Text = tostring(OutputTextSize.Value)
+		end)
 
-			Console.TextSizeBox.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
-				local tonum = tonumber(Console.TextSizeBox.TextBox.Text)
-				if tonum then
-					OutputTextSize.Value = tonum
+		local scrollConsoleInput
+		Console.Output.MouseEnter:Connect(function()
+			scrollConsoleInput = UserInputService.InputChanged:Connect(function(input)
+				if CtrlScroll and input.UserInputType == Enum.UserInputType.MouseWheel and IsHoldingCTRL == true then
+					Console.Output.ScrollingEnabled = false
+					local newTextSize = OutputTextSize.Value + input.Position.Z
+					if newTextSize >= 1 then
+						OutputTextSize.Value = newTextSize
+					end
+				else
+					Console.Output.ScrollingEnabled = true
 				end
 			end)
+		end)
+		Console.Output.MouseLeave:Connect(function()
+			if scrollConsoleInput then
+				scrollConsoleInput:Disconnect()
+				scrollConsoleInput = nil
+			end
+		end)
+
+
+		Console.Clear.MouseButton1Click:Connect(function()
+			for _, log in pairs(Console.Output:GetChildren()) do
+				if log:IsA("TextBox") then
+					log:Destroy()
+				end
+			end
+		end)
+
+		local focussedOutput
+
+		LogService.MessageOut:Connect(function(msg, msgtype)
+			local formattedText = ""
+			local unformattedText = ""
+			local newOutputText = Console.OutputTemplate:Clone()
+			table.insert(displayedOutput, newOutputText)
+
+			if #displayedOutput > OutputLimit.Value then
+				local oldest = table.remove(displayedOutput, 1)
+				if oldest and typeof(oldest) == "Instance" then
+					oldest:Destroy()
+				end
+			end
+
+			unformattedText = os.date("%H:%M:%S")..'   '..msg
+			if msgtype == Enum.MessageType.MessageOutput then
+				formattedText = os.date("%H:%M:%S")..'   <font color="rgb(204, 204, 204)">'..msg..'</font>'
+				newOutputText.Text = formattedText
+			elseif msgtype == Enum.MessageType.MessageWarning then
+				formattedText = os.date("%H:%M:%S")..'   <b><font color="rgb(255, 142, 60)">'..msg..'</font></b>'
+				newOutputText.Text = formattedText
+			elseif msgtype == Enum.MessageType.MessageError then
+				formattedText = os.date("%H:%M:%S")..'   <b><font color="rgb(255, 68, 68)">'..msg..'</font></b>'
+				newOutputText.Text = formattedText
+			elseif msgtype == Enum.MessageType.MessageInfo then
+				formattedText = os.date("%H:%M:%S")..'   <font color="rgb(128, 215, 255)">'..msg..'</font>'
+				newOutputText.Text = formattedText
+			end
+
+			newOutputText.TextSize = OutputTextSize.Value
 			OutputTextSize:GetPropertyChangedSignal("Value"):Connect(function()
-				Console.TextSizeBox.TextBox.Text = tostring(OutputTextSize.Value)
-			end)
-
-			local scrollConsoleInput
-			Console.Output.MouseEnter:Connect(function()
-				scrollConsoleInput = UserInputService.InputChanged:Connect(function(input)
-					if CtrlScroll and input.UserInputType == Enum.UserInputType.MouseWheel and IsHoldingCTRL == true then
-						Console.Output.ScrollingEnabled = false
-						local newTextSize = OutputTextSize.Value + input.Position.Z
-						if newTextSize >= 1 then
-							OutputTextSize.Value = newTextSize
-						end
-					else
-						Console.Output.ScrollingEnabled = true
-					end
-				end)
-			end)
-			Console.Output.MouseLeave:Connect(function()
-				if scrollConsoleInput then
-					scrollConsoleInput:Disconnect()
-					scrollConsoleInput = nil
-				end
-			end)
-
-
-			Console.Clear.MouseButton1Click:Connect(function()
-				for _, log in pairs(Console.Output:GetChildren()) do
-					if log:IsA("TextBox") then
-						log:Destroy()
-					end
-				end
-			end)
-
-			local focussedOutput
-
-			LogService.MessageOut:Connect(function(msg, msgtype)
-				local formattedText = ""
-				local unformattedText = ""
-				local newOutputText = Console.OutputTemplate:Clone()
-				table.insert(displayedOutput, newOutputText)
-
-				if #displayedOutput > OutputLimit.Value then
-					local oldest = table.remove(displayedOutput, 1)
-					if oldest and typeof(oldest) == "Instance" then
-						oldest:Destroy()
-					end
-				end
-
-				unformattedText = os.date("%H:%M:%S")..'   '..msg
-				if msgtype == Enum.MessageType.MessageOutput then
-					formattedText = os.date("%H:%M:%S")..'   <font color="rgb(204, 204, 204)">'..msg..'</font>'
-					newOutputText.Text = formattedText
-				elseif msgtype == Enum.MessageType.MessageWarning then
-					formattedText = os.date("%H:%M:%S")..'   <b><font color="rgb(255, 142, 60)">'..msg..'</font></b>'
-					newOutputText.Text = formattedText
-				elseif msgtype == Enum.MessageType.MessageError then
-					formattedText = os.date("%H:%M:%S")..'   <b><font color="rgb(255, 68, 68)">'..msg..'</font></b>'
-					newOutputText.Text = formattedText
-				elseif msgtype == Enum.MessageType.MessageInfo then
-					formattedText = os.date("%H:%M:%S")..'   <font color="rgb(128, 215, 255)">'..msg..'</font>'
-					newOutputText.Text = formattedText
-				end
-
 				newOutputText.TextSize = OutputTextSize.Value
-				OutputTextSize:GetPropertyChangedSignal("Value"):Connect(function()
-					newOutputText.TextSize = OutputTextSize.Value
-				end)
-
-				newOutputText.Focused:Connect(function()
-					focussedOutput = newOutputText
-					newOutputText.Text = unformattedText
-				end)
-				newOutputText.FocusLost:Connect(function()
-					focussedOutput = nil
-					newOutputText.Text = formattedText
-				end)
-
-				newOutputText.Parent = Console.Output
-				newOutputText.Visible = true
 			end)
 
-			Console.Output.MouseLeave:Connect(function()
-				if focussedOutput then
-					focussedOutput:ReleaseFocus()
-				end
+			newOutputText.Focused:Connect(function()
+				focussedOutput = newOutputText
+				newOutputText.Text = unformattedText
+			end)
+			newOutputText.FocusLost:Connect(function()
+				focussedOutput = nil
+				newOutputText.Text = formattedText
 			end)
 
-			Console.CommandLine.ScrollingFrame.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+			newOutputText.Parent = Console.Output
+			newOutputText.Visible = true
+		end)
 
-				local oneliner = string.gsub(Console.CommandLine.ScrollingFrame.TextBox.Text, "\n", "    ")
-				Console.CommandLine.ScrollingFrame.TextBox.Text = oneliner
+		Console.Output.MouseLeave:Connect(function()
+			if focussedOutput then
+				focussedOutput:ReleaseFocus()
+			end
+		end)
 
-				Console.CommandLine.ScrollingFrame.Highlight.Text = SyntaxHighlightingModule.run(Console.CommandLine.ScrollingFrame.TextBox.Text)
-			end)
+		Console.CommandLine.ScrollingFrame.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+
+			local oneliner = string.gsub(Console.CommandLine.ScrollingFrame.TextBox.Text, "\n", "    ")
+			Console.CommandLine.ScrollingFrame.TextBox.Text = oneliner
+
+			Console.CommandLine.ScrollingFrame.Highlight.Text = SyntaxHighlightingModule.run(Console.CommandLine.ScrollingFrame.TextBox.Text)
+		end)
 
 
 
-			Console.CommandLine.ScrollingFrame.TextBox.FocusLost:Connect(function(enterPressed)
-				if enterPressed and Console.CommandLine.ScrollingFrame.TextBox.Text ~= "" then
-					print("> "..Console.CommandLine.ScrollingFrame.TextBox.Text)
-					loadstring(Console.CommandLine.ScrollingFrame.TextBox.Text)()
-				end
-			end)
-		end;
-		task.spawn(C_1c);
+		Console.CommandLine.ScrollingFrame.TextBox.FocusLost:Connect(function(enterPressed)
+			if enterPressed and Console.CommandLine.ScrollingFrame.TextBox.Text ~= "" then
+				print("> "..Console.CommandLine.ScrollingFrame.TextBox.Text)
+				loadstring(Console.CommandLine.ScrollingFrame.TextBox.Text)()
+			end
+		end)
 	end
 
 	return Console
@@ -1604,9 +1641,9 @@ local function main()
 		end
 		context:AddRegistered("INSERT_OBJECT")
 		context:AddRegistered("SAVE_INST")
-		context:AddRegistered("CALL_FUNCTION")
-		context:AddRegistered("VIEW_CONNECTIONS")
-		context:AddRegistered("GET_REFERENCES")
+		--context:AddRegistered("CALL_FUNCTION")
+		--context:AddRegistered("VIEW_CONNECTIONS")
+		---context:AddRegistered("GET_REFERENCES")
 		context:AddRegistered("VIEW_API")
 
 		context:QueueDivider()
@@ -1911,7 +1948,7 @@ local function main()
 			end
 		end})
 
-		context:Register("COPY_PATH",{Name = "Copy Path", OnClick = function()
+		context:Register("COPY_PATH",{Name = "Copy Path", IconMap = Explorer.MiscIcons, Icon = "Copy", OnClick = function()
 			local sList = selection.List
 			if #sList == 1 then
 				env.setclipboard(Explorer.GetInstancePath(sList[1].Obj))
@@ -1940,20 +1977,41 @@ local function main()
 
 		end})
 
-		context:Register("GET_REFERENCES",{Name = "Get Lua References", IconMap = Explorer.ClassIcons, Icon = 34, OnClick = function()
+		--[[context:Register("GET_REFERENCES",{Name = "Get Lua References", IconMap = Explorer.ClassIcons, Icon = 34, OnClick = function()
 
-		end})
+		end})]]
 
 		context:Register("SAVE_INST",{Name = "Save to File", IconMap = Explorer.MiscIcons, Icon = "Save", OnClick = function()
-
+			local sList = selection.List
+			if #sList == 1 then
+				env.saveinstance(sList[1].Obj, "Place_"..game.PlaceId.."_"..sList[1].Obj.ClassName.."_"..sList[1].Obj.Name.."_"..os.time(), {
+					Decompile = true
+				})
+			elseif #sList > 1 then
+				for i = 1,#sList do
+					-- sList[i].Obj.Name.." ("..sList[1].Obj.ClassName..")"
+					-- "Place_"..game.PlaceId.."_"..sList[1].Obj.ClassName.."_"..sList[i].Obj.Name.."_"..os.time()
+					
+					env.saveinstance(sList[i].Obj, "Place_"..game.PlaceId.."_"..sList[i].Obj.ClassName.."_"..sList[i].Obj.Name.."_"..os.time(), {
+						Decompile = true
+					})
+					task.wait(0.1)
+				end
+			end
 		end})
 
-		context:Register("VIEW_CONNECTIONS",{Name = "View Connections", OnClick = function()
+		--[[context:Register("VIEW_CONNECTIONS",{Name = "View Connections", OnClick = function()
 
-		end})
-
-		context:Register("VIEW_API",{Name = "View API Page", IconMap = Explorer.MiscIcons, Icon = "Reference", OnClick = function()
-
+		end})]]
+		
+		-- Originally "View API Page"
+		context:Register("VIEW_API",{Name = "Copy Roblox API Page URL", IconMap = Explorer.MiscIcons, Icon = "Reference", OnClick = function()
+			local sList = selection.List
+			if #sList == 1 then
+				env.setclipboard(
+					"https://create.roblox.com/docs/reference/engine/classes/"..sList[1].Obj.ClassName
+				)
+			end
 		end})
 
 		context:Register("VIEW_OBJECT",{Name = "View Object (Right click to reset)", IconMap = Explorer.ClassIcons, Icon = 5, OnClick = function()
@@ -4179,7 +4237,7 @@ local function main()
 			local gui = create({
 				{1,"ScreenGui",{Name="Window",}},
 				{2,"Frame",{Active=true,BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,BorderSizePixel=0,Name="Main",Parent={1},Position=UDim2.new(0.40000000596046,0,0.40000000596046,0),Size=UDim2.new(0,300,0,300),}},
-				{3,"Frame",{BackgroundColor3=Color3.new(0.17647059261799,0.17647059261799,0.17647059261799),BorderSizePixel=0,Name="Content",Parent={2},Position=UDim2.new(0,0,0,20),Size=UDim2.new(1,0,1,-20),ClipsDescendants=true}},
+			--[[background mod set to 0.05]]	{3,"Frame",{BackgroundColor3=Color3.new(0.17647059261799,0.17647059261799,0.17647059261799),BorderSizePixel=0,Name="Content",Parent={2},Position=UDim2.new(0,0,0,20),Size=UDim2.new(1,0,1,-20),ClipsDescendants=true}},
 				{4,"Frame",{BackgroundColor3=Color3.fromRGB(33,33,33),BorderSizePixel=0,Name="Line",Parent={3},Size=UDim2.new(1,0,0,1),}},
 				{5,"Frame",{BackgroundColor3=Color3.new(0.20392157137394,0.20392157137394,0.20392157137394),BorderSizePixel=0,Name="TopBar",Parent={2},Size=UDim2.new(1,0,0,20),}},
 				{6,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Title",Parent={5},Position=UDim2.new(0,5,0,0),Size=UDim2.new(1,-10,0,20),Text="Window",TextColor3=Color3.new(1,1,1),TextSize=14,TextXAlignment=0,}},
@@ -10628,6 +10686,338 @@ else
 	return {InitDeps = initDeps, InitAfterMain = initAfterMain, Main = main}
 end
 end,
+["SaveInstance"] = function()
+--[[
+	Save Instance App Module
+	
+	Revival of the old dex's Save Instance
+]] 
+
+-- Common Locals
+local Main,Lib,Apps,Settings -- Main Containers
+local Explorer, Properties, ScriptViewer, SaveInstance, Notebook -- Major Apps
+local API,RMD,env,service,plr,create,createSimple -- Main Locals
+
+local function initDeps(data)
+	Main = data.Main
+	Lib = data.Lib
+	Apps = data.Apps
+	Settings = data.Settings
+
+	API = data.API
+	RMD = data.RMD
+	env = data.env
+	service = data.service
+	plr = data.plr
+	create = data.create
+	createSimple = data.createSimple
+end
+
+local function initAfterMain()
+	Explorer = Apps.Explorer
+	Properties = Apps.Properties
+	ScriptViewer = Apps.ScriptViewer
+	SaveInstance = Apps.SaveInstance
+	Notebook = Apps.Notebook
+end
+
+local function main()
+	local SaveInstance = {}
+	local window, ListFrame
+	local fileName = "Place_"..game.PlaceId.."_"..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.."_{TIMESTAMP}"
+	local Saving = false
+	
+	local SaveInstanceArgs = {
+		Decompile = true,
+		DecompileTimeout = 10,
+		DecompileIgnore = {"Chat", "CoreGui", "CorePackages"},
+		NilInstances = false,
+		RemovePlayerCharacters = true,
+		SavePlayers = false,
+		MaxThreads = 3,
+		ShowStatus = true,
+		IgnoreDefaultProps = true,
+		IsolateStarterPlayer = true
+	}
+	
+	local function AddCheckbox(title, default)
+		local frame = Lib.Frame.new()
+		frame.Gui.Parent = ListFrame
+		frame.Gui.Transparency = 1
+		frame.Gui.Size = UDim2.new(1,0,0,20)
+		
+		local listlayout = Instance.new("UIListLayout")
+		listlayout.Parent = frame.Gui
+		listlayout.FillDirection = Enum.FillDirection.Horizontal
+		listlayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+		listlayout.VerticalAlignment = Enum.VerticalAlignment.Center
+		listlayout.Padding = UDim.new(0, 10)
+		
+		-- Checkbox
+		local checkbox = Lib.Checkbox.new()
+		
+		checkbox.Gui.Parent = frame.Gui
+		checkbox.Gui.Size = UDim2.new(0,15,0,15)
+		
+		-- Label
+		local label = Lib.Label.new()
+		
+		label.Gui.Parent = frame.Gui
+		label.Gui.Size = UDim2.new(1, 0,1, -15)
+		label.Gui.Text = title
+		label.TextTruncate = Enum.TextTruncate.AtEnd
+		
+		checkbox:SetState(default)
+		
+		return checkbox
+	end
+	
+	local function AddTextbox(title, default, sizeX)
+		default = tostring(default)
+		local frame = Lib.Frame.new()
+		frame.Gui.Parent = ListFrame
+		frame.Gui.Transparency = 1
+		frame.Gui.Size = UDim2.new(1,0,0,20)
+
+		local listlayout = Instance.new("UIListLayout")
+		listlayout.Parent = frame.Gui
+		listlayout.FillDirection = Enum.FillDirection.Horizontal
+		listlayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+		listlayout.VerticalAlignment = Enum.VerticalAlignment.Center
+		listlayout.Padding = UDim.new(0, 10)
+
+		-- Textbox
+		local textbox = Lib.ViewportTextBox.new()
+
+		textbox.Gui.Parent = frame.Gui
+		if sizeX and type(sizeX) == "number" then
+			textbox.Gui.Size = UDim2.new(0,sizeX,0,15)
+		else
+			textbox.Gui.Size = UDim2.new(0,45,0,15)
+		end
+		
+		textbox.Gui.AutomaticSize = Enum.AutomaticSize.X
+		textbox.TextBox.AutomaticSize = Enum.AutomaticSize.X
+
+		-- Label
+		local label = Lib.Label.new()
+
+		label.Gui.Parent = frame.Gui
+		label.Gui.Size = UDim2.new(1, 0,1, -15)
+		label.Gui.Text = title
+		label.TextTruncate = Enum.TextTruncate.AtEnd
+
+		textbox:SetText(default)
+
+		return textbox
+	end
+	
+	local function AddDropdown(title, items, default, sizeX)
+		local frame = Lib.Frame.new()
+		frame.Gui.Parent = ListFrame
+		frame.Gui.Transparency = 1
+		frame.Gui.Size = UDim2.new(1,0,0,20)
+
+		local listlayout = Instance.new("UIListLayout")
+		listlayout.Parent = frame.Gui
+		listlayout.FillDirection = Enum.FillDirection.Horizontal
+		listlayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+		listlayout.VerticalAlignment = Enum.VerticalAlignment.Center
+		listlayout.Padding = UDim.new(0, 10)
+
+		-- Textbox
+		local dropdown = Lib.ViewportTextBox.new()
+
+		dropdown.Gui.Parent = frame.Gui
+		if sizeX and type(sizeX) == "number" then
+			dropdown.Gui.Size = UDim2.new(0,sizeX,0,15)
+		else
+			dropdown.Gui.Size = UDim2.new(0,65,0,15)
+		end
+
+		-- Label
+		local label = Lib.Label.new()
+		
+		label.Gui.Parent = frame.Gui
+		label.Gui.Size = UDim2.new(1, 0,1, -15)
+		label.Gui.Text = title
+		label.TextTruncate = Enum.TextTruncate.AtEnd
+
+		dropdown:SetOptions(items)
+		dropdown:SetSelected(default)
+
+		return dropdown
+	end
+	
+	SaveInstance.Init = function()
+		window = Lib.Window.new()
+		window:SetTitle("Save Instance")
+		window:Resize(350,350)
+		SaveInstance.Window = window
+		
+		-- ListFrame
+		
+		-- Fake ScrollBar dex, because its too advanced
+		ListFrame = Instance.new("ScrollingFrame")
+		ListFrame.Parent = window.GuiElems.Content
+		ListFrame.Size = UDim2.new(1, 0,1, -40)
+		ListFrame.Position = UDim2.new(0, 0, 0, 0)
+		ListFrame.Transparency = 1
+		ListFrame.CanvasSize = UDim2.new(0,0,0,0)
+		ListFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+		ListFrame.ScrollBarThickness = 16
+		ListFrame.BottomImage = ""
+		ListFrame.TopImage = ""
+		ListFrame.ScrollBarImageColor3 = Color3.fromRGB(70, 70, 70)
+		ListFrame.ScrollBarImageTransparency = 0
+		ListFrame.ZIndex = 2
+		ListFrame.BorderSizePixel = 0
+		
+		local scrollbar = Lib.ScrollBar.new()
+		scrollbar.Gui.Parent = window.GuiElems.Content
+		scrollbar.Gui.Size = UDim2.new(1, 0,1, -40)
+		scrollbar.Gui.Up.ZIndex = 3
+		scrollbar.Gui.Down.ZIndex = 3
+		
+		ListFrame:GetPropertyChangedSignal("AbsoluteWindowSize"):Connect(function()
+			if ListFrame.AbsoluteCanvasSize ~= ListFrame.AbsoluteWindowSize then
+				scrollbar.Gui.Visible = true
+			else
+				scrollbar.Gui.Visible = false
+			end
+		end)
+		
+		local ListLayout = Instance.new("UIListLayout")
+		ListLayout.Parent = ListFrame
+		ListLayout.Padding = UDim.new(0, 5)
+		
+		local Padding = Instance.new("UIPadding")
+		Padding.Parent = ListFrame
+		Padding.PaddingBottom = UDim.new(0, 5)
+		Padding.PaddingLeft = UDim.new(0, 10)
+		Padding.PaddingRight = UDim.new(0, 10)
+		Padding.PaddingTop = UDim.new(0, 5)
+		
+		-- Options
+		
+		local Decompile = AddCheckbox("Decompile Scripts (LocalScript and ModuleScript)", SaveInstanceArgs.Decompile)
+		Decompile.OnInput:Connect(function()
+			SaveInstanceArgs.Decompile = Decompile.Toggled
+		end)
+		
+		local decompileTimeout = AddTextbox("Decompile Timeout (s)", SaveInstanceArgs.DecompileTimeout, 15)
+		decompileTimeout.TextBox.FocusLost:Connect(function()
+			SaveInstanceArgs.DecompileTimeout = tonumber(decompileTimeout.TextBox.Text)
+		end)
+		
+		local decompileThread = AddTextbox("Decompiler Max Threads", "3", 15)
+		decompileThread.TextBox.FocusLost:Connect(function()
+			SaveInstanceArgs.MaxThreads = tonumber(decompileThread.TextBox.Text)
+		end)
+		
+		local decompileIgnore = AddTextbox("Decompile Ignore", table.concat(SaveInstanceArgs.DecompileIgnore, ","), 50)
+		decompileIgnore.TextBox.FocusLost:Connect(function()
+			local inputText = decompileIgnore.TextBox.Text
+			local rawList = string.split(inputText, ", ") or string.split(inputText, ",")
+			local finalList = {}
+
+			for _, text in ipairs(rawList) do
+				local split = string.split(text, ",") or string.split(text, ", ")
+				for _, textFound in ipairs(split) do
+					table.insert(finalList, textFound)
+				end
+			end
+			SaveInstanceArgs.DecompileIgnore = finalList
+		end)
+
+		
+		local NilObj = AddCheckbox("Save Nil Instances", SaveInstanceArgs.NilInstances)
+		NilObj.OnInput:Connect(function()
+			SaveInstanceArgs.NilInstances = NilObj.Toggled
+		end)
+
+		local RemovePlayerChar = AddCheckbox("Remove Player Characters", SaveInstanceArgs.RemovePlayerCharacters)
+		RemovePlayerChar.OnInput:Connect(function()
+			SaveInstanceArgs.RemovePlayerCharacters = RemovePlayerChar.Toggled
+		end)
+		
+		local SavePlayerObj = AddCheckbox("Save Player Instance", SaveInstanceArgs.SavePlayers)
+		SavePlayerObj.OnInput:Connect(function()
+			SaveInstanceArgs.SavePlayers = SavePlayerObj.Toggled
+		end)
+		
+		local IsolateStarterPlr = AddCheckbox("Isolate StarterPlayer", SaveInstanceArgs.IsolateStarterPlayer)
+		IsolateStarterPlr.OnInput:Connect(function()
+			SaveInstanceArgs.IsolateStarterPlayer = IsolateStarterPlr.Toggled
+		end)
+		
+		local IgnoreDefaultProps = AddCheckbox("Ignore Default Properties", SaveInstanceArgs.IgnoreDefaultProps)
+		IgnoreDefaultProps.OnInput:Connect(function()
+			SaveInstanceArgs.IgnoreDefaultProps = IgnoreDefaultProps.Toggled
+		end)
+		
+		local ShowStat = AddCheckbox("Show Status", SaveInstanceArgs.ShowStatus)
+		ShowStat.OnInput:Connect(function()
+			SaveInstanceArgs.ShowStatus = ShowStat.Toggled
+		end)
+		
+		
+		-- Decompile buttons below
+		local FilenameTextBox = Lib.ViewportTextBox.new()
+		FilenameTextBox.Gui.Parent = window.GuiElems.Content
+		FilenameTextBox.Size = UDim2.new(1,0, 0,20)
+		FilenameTextBox.Position = UDim2.new(0,0, 1,-40)
+		
+		local textpadding = Instance.new("UIPadding")
+		textpadding.Parent = FilenameTextBox.Gui
+		textpadding.PaddingLeft = UDim.new(0, 5)
+		textpadding.PaddingRight = UDim.new(0, 5)
+		
+		local BackgroundButton = Lib.Frame.new()
+		BackgroundButton.Gui.Parent = window.GuiElems.Content
+		BackgroundButton.Size = UDim2.new(1,0, 0,20)
+		BackgroundButton.Position = UDim2.new(0,0, 1,-20)
+		
+		local LabelButton = Lib.Label.new()
+		LabelButton.Gui.Parent = window.GuiElems.Content
+		LabelButton.Size = UDim2.new(1,0, 0,20)
+		LabelButton.Position = UDim2.new(0,0, 1,-20)
+		LabelButton.Gui.Text = "Save"
+		LabelButton.Gui.TextXAlignment = Enum.TextXAlignment.Center
+		
+		local Button = Instance.new("TextButton")
+		Button.Parent = BackgroundButton.Gui
+		Button.Size = UDim2.new(1,0, 1,0)
+		Button.Position = UDim2.new(0,0, 0,0)
+		Button.Transparency = 1
+		
+		FilenameTextBox.TextBox.Text = fileName
+		Button.MouseButton1Click:Connect(function()
+			local fileName = FilenameTextBox.TextBox.Text:gsub("{TIMESTAMP}", os.date("%d-%m-%Y_%H-%M-%S"))
+			window:SetTitle("Save Instance - Saving")
+			local s, result = pcall(env.saveinstance, game, fileName, SaveInstanceArgs)
+			if s then
+				window:SetTitle("Save Instance - Saved")
+			else
+				window:SetTitle("Save Instance - Error")
+				task.spawn(error("Failed to save the game: "..result))
+			end
+			task.wait(5)
+			window:SetTitle("Save Instance")
+			---env.saveinstance(game, fileName, SaveInstanceArgs)
+		end)
+	end
+
+	return SaveInstance
+end
+
+-- TODO: Remove when open source
+if gethsfuncs then
+	_G.moduleData = {InitDeps = initDeps, InitAfterMain = initAfterMain, Main = main}
+else
+	return {InitDeps = initDeps, InitAfterMain = initAfterMain, Main = main}
+end
+end,
 ["ScriptViewer"] = function()
 --[[
 	Script Viewer App Module
@@ -10675,33 +11065,33 @@ end
 
 local function main()
 	local ScriptViewer = {}
-
-	local window,codeFrame
+	local window, codeFrame
+	local PreviousScr = nil
 
 	ScriptViewer.ViewScript = function(scr)
-
-		
-		
 		local oldtick = tick()
-		
 		local s,source = pcall(env.decompile or function() end,scr)
 		
 		if not s or not source then
+			PreviousScr = nil
 			source = "-- Unable to view source.\n"
 			source = source .. "-- Script Path: game."..scr:GetFullName().."\n"
-			if scr:IsA("Script") and scr.RunContext == Enum.RunContext.Legacy then
+			if scr:IsA("Script") and scr.RunContext == Enum.RunContext.Legacy and not scr:IsA("LocalScript") then
 				source = source .. "-- Reason: The script is likely to be running on server, or your executor does not support decompiler.\n"
 			else
 				source = source .. "-- Reason: Your executor does not support decompiler.\n"
 			end
 			source = source .. "-- Executor: "..executorName.." ("..executorVersion..")"
 		else
+			PreviousScr = scr
 			local decompiled = source
-			-- math.floor( (tick() - oldtick) * 100) / 100
+
 			source = "-- Script Path: game."..scr:GetFullName().."\n"
 			source = source .. "-- Took "..tostring(math.floor( (tick() - oldtick) * 100) / 100).."s to decompile.\n"
 			source = source .. "-- Executor: "..executorName.." ("..executorVersion..")\n\n"
 			
+			
+			source = source .. "-- // local script = game."..scr:GetFullName().."\n"
 			source = source .. decompiled
 			
 			oldtick = nil
@@ -10720,36 +11110,13 @@ local function main()
 
 		codeFrame = Lib.CodeFrame.new()
 		codeFrame.Frame.Position = UDim2.new(0,0,0,20)
-		codeFrame.Frame.Size = UDim2.new(1,0,1,-20)
+		codeFrame.Frame.Size = UDim2.new(1,0,1,-40)
 		codeFrame.Frame.Parent = window.GuiElems.Content
-
-		local execute = Instance.new("TextButton",window.GuiElems.Content)
-		execute.BackgroundTransparency = 1
-		execute.Position = UDim2.new(0,0,0,0)
-		execute.Size = UDim2.new(0.25,0,0,20)
-		execute.Text = "Execute"
-		execute.TextColor3 = Color3.new(1,1,1)
-
-		execute.MouseButton1Click:Connect(function()
-			local source = codeFrame:GetText()
-			loadstring(source)()
-		end)
-		
-		local clear = Instance.new("TextButton",window.GuiElems.Content)
-		clear.BackgroundTransparency = 1
-		clear.Size = UDim2.new(0.25,0,0,20)
-		clear.Position = UDim2.new(0.25,0,0,0)
-		clear.Text = "Clear"
-		clear.TextColor3 = Color3.new(1,1,1)
-
-		clear.MouseButton1Click:Connect(function()
-			codeFrame:SetText("")
-		end)
 		
 		local copy = Instance.new("TextButton",window.GuiElems.Content)
 		copy.BackgroundTransparency = 1
-		copy.Size = UDim2.new(0.25,0,0,20)
-		copy.Position = UDim2.new(0.5,0,0,0)
+		copy.Size = UDim2.new(0.33,0,0,20)
+		copy.Position = UDim2.new(0,0,0,0)
 		copy.Text = "Copy to Clipboard"
 		copy.TextColor3 = Color3.new(1,1,1)
 
@@ -10757,13 +11124,11 @@ local function main()
 			local source = codeFrame:GetText()
 			setclipboard(source)
 		end)
-		
-		
 
 		local save = Instance.new("TextButton",window.GuiElems.Content)
 		save.BackgroundTransparency = 1
-		save.Size = UDim2.new(0.25,0,0,20)
-		save.Position = UDim2.new(0.75,0,0,0)
+		save.Size = UDim2.new(0.33,0,0,20)
+		save.Position = UDim2.new(0.33,0,0,0)
 		save.Text = "Save to File"
 		save.TextColor3 = Color3.new(1,1,1)
 
@@ -10772,9 +11137,131 @@ local function main()
 			local filename = "Place_"..game.PlaceId.."_Script_"..os.time()..".txt"
 
 			writefile(filename,source)
-			if movefileas then -- TODO: USE ENV
+			--[[if movefileas then -- TODO: USE ENV
 				movefileas(filename,".txt")
+			end]]
+		end)
+		
+		local dumpbtn = Instance.new("TextButton",window.GuiElems.Content)
+		dumpbtn.BackgroundTransparency = 1
+		dumpbtn.Position = UDim2.new(0.7,0,0,0)
+		dumpbtn.Size = UDim2.new(0.3,0,0,20)
+		dumpbtn.Text = "Dump Functions"
+		dumpbtn.TextColor3 = Color3.new(1,1,1)
+
+		dumpbtn.MouseButton1Click:Connect(function()
+			if PreviousScr ~= nil then
+				pcall(function()
+					-- thanks King.Kevin#6025 you'll obviously be credited (no discord tag since that can easily be impersonated)
+					local getgc = getgc or get_gc_objects
+					local getupvalues = (debug and debug.getupvalues) or getupvalues or getupvals
+					local getconstants = (debug and debug.getconstants) or getconstants or getconsts
+					local getinfo = (debug and (debug.getinfo or debug.info)) or getinfo
+					local original = ("\n-- // Function Dumper made by King.Kevin\n-- // Script Path: %s\n\n--[["):format(PreviousScr:GetFullName())
+					local dump = original
+					local functions, function_count, data_base = {}, 0, {}
+					function functions:add_to_dump(str, indentation, new_line)
+						local new_line = new_line or true
+						dump = dump .. ("%s%s%s"):format(string.rep("		", indentation), tostring(str), new_line and "\n" or "")
+					end
+					function functions:get_function_name(func)
+						local n = getinfo(func).name
+						return n ~= "" and n or "Unknown Name"
+					end
+					function functions:dump_table(input, indent, index)
+						local indent = indent < 0 and 0 or indent
+						functions:add_to_dump(("%s [%s] %s"):format(tostring(index), tostring(typeof(input)), tostring(input)), indent - 1)
+						local count = 0
+						for index, value in pairs(input) do
+							count = count + 1
+							if type(value) == "function" then
+								functions:add_to_dump(("%d [function] = %s"):format(count, functions:get_function_name(value)), indent)
+							elseif type(value) == "table" then
+								if not data_base[value] then
+									data_base[value] = true
+									functions:add_to_dump(("%d [table]:"):format(count), indent)
+									functions:dump_table(value, indent + 1, index)
+								else
+									functions:add_to_dump(("%d [table] (Recursive table detected)"):format(count), indent)
+								end
+							else
+								functions:add_to_dump(("%d [%s] = %s"):format(count, tostring(typeof(value)), tostring(value)), indent)
+							end
+						end
+					end
+					function functions:dump_function(input, indent)
+						functions:add_to_dump(("\nFunction Dump: %s"):format(functions:get_function_name(input)), indent)
+						functions:add_to_dump(("\nFunction Upvalues: %s"):format(functions:get_function_name(input)), indent)
+						for index, upvalue in pairs(getupvalues(input)) do
+							if type(upvalue) == "function" then
+								functions:add_to_dump(("%d [function] = %s"):format(index, functions:get_function_name(upvalue)), indent + 1)
+							elseif type(upvalue) == "table" then
+								if not data_base[upvalue] then
+									data_base[upvalue] = true
+									functions:add_to_dump(("%d [table]:"):format(index), indent + 1)
+									functions:dump_table(upvalue, indent + 2, index)
+								else
+									functions:add_to_dump(("%d [table] (Recursive table detected)"):format(index), indent + 1)
+								end
+							else
+								functions:add_to_dump(("%d [%s] = %s"):format(index, tostring(typeof(upvalue)), tostring(upvalue)), indent + 1)
+							end
+						end
+						functions:add_to_dump(("\nFunction Constants: %s"):format(functions:get_function_name(input)), indent)
+						for index, constant in pairs(getconstants(input)) do
+							if type(constant) == "function" then
+								functions:add_to_dump(("%d [function] = %s"):format(index, functions:get_function_name(constant)), indent + 1)
+							elseif type(constant) == "table" then
+								if not data_base[constant] then
+									data_base[constant] = true
+									functions:add_to_dump(("%d [table]:"):format(index), indent + 1)
+									functions:dump_table(constant, indent + 2, index)
+								else
+									functions:add_to_dump(("%d [table] (Recursive table detected)"):format(index), indent + 1)
+								end
+							else
+								functions:add_to_dump(("%d [%s] = %s"):format(index, tostring(typeof(constant)), tostring(constant)), indent + 1)
+							end
+						end
+					end
+					for _, _function in pairs(getgc()) do
+						if typeof(_function) == "function" and getfenv(_function).script and getfenv(_function).script == PreviousScr then
+							functions:dump_function(_function, 0)
+							functions:add_to_dump("\n" .. ("="):rep(100), 0, false)
+						end
+					end
+					local source = codeFrame:GetText()
+
+					if dump ~= original then source = source .. dump .. "]]" end
+					codeFrame:SetText(source)
+				end)
 			end
+		end)
+		
+		-- Buttons below the editor
+		
+		
+		local execute = Instance.new("TextButton",window.GuiElems.Content)
+		execute.BackgroundTransparency = 1
+		execute.Size = UDim2.new(0.5,0,0,20)
+		execute.Position = UDim2.new(0,0,1,-20)
+		execute.Text = "Execute"
+		execute.TextColor3 = Color3.new(1,1,1)
+
+		execute.MouseButton1Click:Connect(function()
+			local source = codeFrame:GetText()
+			loadstring(source)()
+		end)
+
+		local clear = Instance.new("TextButton",window.GuiElems.Content)
+		clear.BackgroundTransparency = 1
+		clear.Size = UDim2.new(0.5,0,0,20)
+		clear.Position = UDim2.new(0.5,0,1,-20)
+		clear.Text = "Clear"
+		clear.TextColor3 = Color3.new(1,1,1)
+
+		clear.MouseButton1Click:Connect(function()
+			codeFrame:SetText("")
 		end)
 	end
 
@@ -10791,17 +11278,23 @@ end,
 }
 --[[
 	Dex++
-	Beta 1.1.0 Version
+	Beta 1.2.0 Version
 	
 	Created by Moon
-	Modified by Chillz
+	Edited by Chillz
 	
 	Dex is a debugging suite designed to help the user debug games and find any potential vulnerabilities.
 ]]
 
+--[==[
+Please add
+local nodes = {}
+at the very beginning of the out.lua script to make click part to select work :3
+]==]
+
 local cloneref = cloneref or function(...) return ... end
 -- Main vars
-local Main, Explorer, Properties, ScriptViewer, Console, DefaultSettings, Notebook, Serializer, Lib
+local Main, Explorer, Properties, ScriptViewer, Console, SaveInstance, DefaultSettings, Notebook, Serializer, Lib
 local API, RMD
 
 -- Default Settings
@@ -10932,10 +11425,10 @@ Main = (function()
 	Main.GitRepoName = "LorekeeperZinnia/Dex"
 	]]
 
-	Main.ModuleList = {"Explorer","Properties","ScriptViewer","Console"}
+	Main.ModuleList = {"Explorer","Properties","ScriptViewer","Console","SaveInstance"}
 	Main.Elevated = false
 	Main.MissingEnv = {}
-	Main.Version = "Beta 1.1.0"
+	Main.Version = "Beta 1.2.0"
 	Main.Mouse = plr:GetMouse()
 	Main.AppControls = {}
 	Main.Apps = Apps
@@ -11049,7 +11542,7 @@ Main = (function()
 		for i,v in pairs(Main.ModuleList) do
 			local s,e = pcall(Main.LoadModule,v)
 			if not s then
-				Main.Error("FAILED LOADING " + v + " CAUSE " + e)
+				Main.Error("FAILED LOADING " .. v .. " CAUSE " .. e)
 			end
 		end
 
@@ -11058,12 +11551,14 @@ Main = (function()
 		Properties = Apps.Properties
 		ScriptViewer = Apps.ScriptViewer
 		Console = Apps.Console
+		SaveInstance = Apps.SaveInstance
 		Notebook = Apps.Notebook
 		local appTable = {
 			Explorer = Explorer,
 			Properties = Properties,
 			ScriptViewer = ScriptViewer,
 			Console = Console,
+			SaveInstance = SaveInstance,
 			Notebook = Notebook
 		}
 
@@ -11089,7 +11584,25 @@ Main = (function()
 		env.makefolder = makefolder
 		env.listfiles = listfiles
 		env.loadfile = loadfile
-		env.saveinstance = saveinstance
+		env.saveinstance = saveinstance or (function()
+			warn("No built-in saveinstance exists, using SynSaveInstance and wrapper...")
+			if game:GetService("RunService"):IsStudio() then return end
+			local Params = {
+				RepoURL = "https://raw.githubusercontent.com/luau/SynSaveInstance/main/",
+				SSI = "saveinstance",
+			}
+			local synsaveinstance = loadstring(game:HttpGet(Params.RepoURL .. Params.SSI .. ".luau", true), Params.SSI)()
+		
+			local function wrappedsaveinstance(obj, filepath, options)
+				options["FilePath"] = filepath
+				synsaveinstance(options)
+			end
+			
+			getgenv().saveinstance = wrappedsaveinstance
+			env.saveinstance = wrappedsaveinstance
+			env.wrappedsaveinstance = wrappedsaveinstance
+			return wrappedsaveinstance
+		end)()
 
 		-- debug
 		env.getupvalues = debug.getupvalues or getupvals
@@ -11107,6 +11620,66 @@ Main = (function()
 		env.setclipboard = setclipboard
 		env.getnilinstances = getnilinstances or get_nil_instances
 		env.getloadedmodules = getloadedmodules
+		
+		env.request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
+		
+		env.decompile = decompile or (function()
+			-- by lovrewe
+			warn("No built-in decompiler exists, using Konstant decompiler...")
+			--assert(getscriptbytecode, "Exploit not supported.")
+
+			if not getscriptbytecode then warn('Konstant decompiler is not supported. "getscriptbytecode" is missing.') return end
+
+			local API = "http://api.plusgiant5.com"
+
+			local last_call = 0
+
+			local request = env.request
+
+			local function call(konstantType, scriptPath)
+				local success, bytecode = pcall(getscriptbytecode, scriptPath)
+
+				if (not success) then
+					return `-- Failed to get script bytecode, error:\n\n--[[\n{bytecode}\n--]]`
+				end
+
+				local time_elapsed = os.clock() - last_call
+				if time_elapsed <= .5 then
+					task.wait(.5 - time_elapsed)
+				end
+
+				local httpResult = request({
+					Url = API .. konstantType,
+					Body = bytecode,
+					Method = "POST",
+					Headers = {
+						["Content-Type"] = "text/plain"
+					}
+				})
+
+				last_call = os.clock()
+
+				if (httpResult.StatusCode ~= 200) then
+					return `-- Error occurred while requesting Konstant API, error:\n\n--[[\n{httpResult.Body}\n--]]`
+				else
+					return httpResult.Body
+				end
+			end
+
+			local function decompile(scriptPath)
+				return call("/konstant/decompile", scriptPath)
+			end
+
+			local function disassemble(scriptPath)
+				return call("/konstant/disassemble", scriptPath)
+			end
+
+			getgenv().decompile = decompile
+			getgenv().disassemble = disassemble
+			
+			env.decompile = decompile
+			return decompile
+		end)()
 
 		if identifyexecutor then
 			Main.Executor = identifyexecutor()
@@ -11477,14 +12050,14 @@ Main = (function()
 			{3,"Frame",{BackgroundColor3=Color3.new(0.17647059261799,0.17647059261799,0.17647059261799),BorderSizePixel=0,ClipsDescendants=true,Name="Holder",Parent={2},Size=UDim2.new(1,0,1,0),}},
 			{4,"UIGradient",{Parent={3},Rotation=30,Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1,0),NumberSequenceKeypoint.new(1,1,0),}),}},
 			{5,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=4,Name="Title",Parent={3},Position=UDim2.new(0,-190,0,15),Size=UDim2.new(0,100,0,50),Text="Dex++",TextColor3=Color3.new(1,1,1),TextSize=50,TextTransparency=1,}},
-			{6,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Desc",Parent={3},Position=UDim2.new(0,-230,0,60),Size=UDim2.new(0,180,0,25),Text="Your Debugging Buddy",TextColor3=Color3.new(1,1,1),TextSize=18,TextTransparency=1,}},
+			{6,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Desc",Parent={3},Position=UDim2.new(0,-230,0,60),Size=UDim2.new(0,180,0,25),Text="Debugging Suite",TextColor3=Color3.new(1,1,1),TextSize=18,TextTransparency=1,}},
 			{7,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="StatusText",Parent={3},Position=UDim2.new(0,20,0,110),Size=UDim2.new(0,180,0,25),Text="Fetching API",TextColor3=Color3.new(1,1,1),TextSize=14,TextTransparency=1,}},
 			{8,"Frame",{BackgroundColor3=Color3.new(0.20392157137394,0.20392157137394,0.20392157137394),BorderSizePixel=0,Name="ProgressBar",Parent={3},Position=UDim2.new(0,110,0,145),Size=UDim2.new(0,0,0,4),}},
 			{9,"Frame",{BackgroundColor3=Color3.new(0.2392156869173,0.56078433990479,0.86274510622025),BorderSizePixel=0,Name="Bar",Parent={8},Size=UDim2.new(0,0,1,0),}},
 			{10,"ImageLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Image="rbxassetid://2764171053",ImageColor3=Color3.new(0.17647059261799,0.17647059261799,0.17647059261799),Parent={8},ScaleType=1,Size=UDim2.new(1,0,1,0),SliceCenter=Rect.new(2,2,254,254),}},
-			{11,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Creator",Parent={2},Position=UDim2.new(1,-110,1,-20),Size=UDim2.new(0,105,0,20),Text="Developed by Moon, Modified by Chillz",TextColor3=Color3.new(1,1,1),TextSize=14,TextXAlignment=1,}},
+			{11,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Creator",Parent={2},Position=UDim2.new(1,-110,1,-20),Size=UDim2.new(0,105,0,20),Text="Developed by Moon, Edited by Chillz",TextColor3=Color3.new(1,1,1),TextSize=14,TextXAlignment=1,}},
 			{12,"UIGradient",{Parent={11},Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1,0),NumberSequenceKeypoint.new(1,1,0),}),}},
-			{13,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Version",Parent={2},Position=UDim2.new(1,-110,1,-35),Size=UDim2.new(0,105,0,20),Text="Beta 1.1.0",TextColor3=Color3.new(1,1,1),TextSize=14,TextXAlignment=1,}},
+			{13,"TextLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,Font=3,Name="Version",Parent={2},Position=UDim2.new(1,-110,1,-35),Size=UDim2.new(0,105,0,20),Text=Main.Version,TextColor3=Color3.new(1,1,1),TextSize=14,TextXAlignment=1,}},
 			{14,"UIGradient",{Parent={13},Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1,0),NumberSequenceKeypoint.new(1,1,0),}),}},
 			{15,"ImageLabel",{BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=1,BorderSizePixel=0,Image="rbxassetid://1427967925",Name="Outlines",Parent={2},Position=UDim2.new(0,-5,0,-5),ScaleType=1,Size=UDim2.new(1,10,1,10),SliceCenter=Rect.new(6,6,25,25),TileSize=UDim2.new(0,20,0,20),}},
 			{16,"UIGradient",{Parent={15},Rotation=-30,Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1,0),NumberSequenceKeypoint.new(1,1,0),}),}},
@@ -11794,6 +12367,8 @@ Main = (function()
 		Main.CreateApp({Name = "Notepad", IconMap = Main.LargeIcons, Icon = "Script_Viewer", Window = ScriptViewer.Window})
 		
 		Main.CreateApp({Name = "Console", IconMap = Main.LargeIcons, Icon = "Output", Window = Console.Window})
+		
+		Main.CreateApp({Name = "Save Instance", IconMap = Main.LargeIcons, Icon = "Watcher", Window = SaveInstance.Window})
 
 		local cptsOnMouseClick = nil
 		Main.CreateApp({Name = "Click part to select", IconMap = Main.LargeIcons, Icon = 6, OnClick = function(callback)
@@ -11856,7 +12431,7 @@ Main = (function()
 		})
 		Main.LargeIcons = Lib.IconMap.new("rbxassetid://6579106223",256,256,32,32)
 		Main.LargeIcons:SetDict({
-			Explorer = 0, Properties = 1, Script_Viewer = 2, Output = 4
+			Explorer = 0, Properties = 1, Script_Viewer = 2, Watcher = 3, Output = 4
 		})
 
 		-- Fetch version if needed
@@ -11900,6 +12475,7 @@ Main = (function()
 		Properties.Init()
 		ScriptViewer.Init()
 		Console.Init()
+		SaveInstance.Init()
 		Lib.FastWait()
 
 		-- Done
@@ -11914,6 +12490,8 @@ Main = (function()
 		Main.CreateMainGui()
 		Explorer.Window:Show({Align = "right", Pos = 1, Size = 0.5, Silent = true})
 		Properties.Window:Show({Align = "right", Pos = 2, Size = 0.5, Silent = true})
+		
+		Console.Window:Show({Align = "left", Pos = 1, Size = 1, Silent = true})
 		Lib.DeferFunc(function() Lib.Window.ToggleSide("right") end)
 	end
 

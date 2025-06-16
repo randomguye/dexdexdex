@@ -11,6 +11,7 @@ Since the original Dex is the last release and Moon have discontinued it, it sti
 Dex++ will take over the legacy of Moon's Dex and addig missing features.
 Here is the features and stuffs were added/fixed in Dex++
 - Console Output
+- Revived Save Instance
 - Click part to select (thx Toon :3)
 - CodeFrame cursor offset (where cursor on textbox were not aligned properly)
 
@@ -26,7 +27,7 @@ Here is the features and stuffs were added/fixed in Dex++
 ## Missing stuff from old Dex
 Features that existed in old Dex that I didn't get to make. These should be the first things you add if you plan to continue / edit this.
 - ~~Click to select~~
-- Saving (instance specific in right click menu, and a menu for whole map saving)
+- ~~Saving (instance specific in right click menu, and a menu for whole map saving)~~
 - Settings menu
 
 ## Community Server

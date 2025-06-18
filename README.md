@@ -12,6 +12,7 @@ Since the original Dex is the last release and Moon have discontinued it, it sti
 Dex++ will take over the legacy of Moon's Dex and addig missing features.
 Here is the features and stuffs were added/fixed in Dex++
 - Console Output
+- Model Viewer
 - Revived Save Instance
 - Click part to select (thx Toon :3)
 - CodeFrame cursor offset (where cursor on textbox were not aligned properly)

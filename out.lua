@@ -8934,6 +8934,7 @@ local function main()
 			model = Instance.new("Model")
 			model.Parent = viewportFrame
 			
+			originalModel = item
 			item = item:Clone()
 			item.Parent = model
 			model.PrimaryPart = item
@@ -8941,16 +8942,15 @@ local function main()
 			
 		elseif item:IsA("Model") and item ~= workspace and item ~= workspace.Terrain then
 			item.Archivable = true
-			
+			originalModel = item
 			model = item:Clone()
+			
 			
 			model.Parent = viewportFrame
 			model:SetPrimaryPartCFrame(CFrame.new(0, 0, 0))
 		else
 			return
-		end
-		
-		originalModel = item
+		end		
 		
 		camera = Instance.new("Camera")
 		viewportFrame.CurrentCamera = camera

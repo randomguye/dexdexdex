@@ -1,5 +1,6 @@
-# Dex++ - Debugging Suite
+# Dex++
 ![Logo](/logo.png)
+Dex++ is a revival of Moon's Dex, made to fulfill Moon's Dex prophecy.
 
 ## Script
 ```lua

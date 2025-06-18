@@ -13,84 +13,6 @@ local TransparencyWindow = 0.1
 local nodes = {}
 local selection
 
-DefaultSettings = (function()
-	local rgb = Color3.fromRGB
-	return {
-		Explorer = {
-			_Recurse = true,
-			Sorting = true,
-			TeleportToOffset = Vector3.new(0,0,0),
-			ClickToRename = true,
-			AutoUpdateSearch = true,
-			AutoUpdateMode = 0, -- 0 Default, 1 no tree update, 2 no descendant events, 3 frozen
-			PartSelectionBox = true,
-			GuiSelectionBox = true,
-			CopyPathUseGetChildren = true
-		},
-		Properties = {
-			_Recurse = true,
-			MaxConflictCheck = 50,
-			ShowDeprecated = false,
-			ShowHidden = true,
-			ClearOnFocus = false,
-			LoadstringInput = true,
-			NumberRounding = 3,
-			ShowAttributes = false,
-			MaxAttributes = 50,
-			ScaleType = 1 -- 0 Full Name Shown, 1 Equal Halves
-		},
-		Theme = {
-			_Recurse = true,
-			Main1 = rgb(52,52,52),
-			Main2 = rgb(45,45,45),
-			Outline1 = rgb(33,33,33), -- Mainly frames
-			Outline2 = rgb(55,55,55), -- Mainly button
-			Outline3 = rgb(30,30,30), -- Mainly textbox
-			TextBox = rgb(38,38,38),
-			Menu = rgb(32,32,32),
-			ListSelection = rgb(11,90,175),
-			Button = rgb(60,60,60),
-			ButtonHover = rgb(68,68,68),
-			ButtonPress = rgb(40,40,40),
-			Highlight = rgb(75,75,75),
-			Text = rgb(255,255,255),
-			PlaceholderText = rgb(100,100,100),
-			Important = rgb(255,0,0),
-			ExplorerIconMap = "",
-			MiscIconMap = "",
-			Syntax = {
-				Text = rgb(204,204,204),
-				Background = rgb(36,36,36),
-				Selection = rgb(255,255,255),
-				SelectionBack = rgb(11,90,175),
-				Operator = rgb(204,204,204),
-				Number = rgb(255,198,0),
-				String = rgb(173,241,149),
-				Comment = rgb(102,102,102),
-				Keyword = rgb(248,109,124),
-				Error = rgb(255,0,0),
-				FindBackground = rgb(141,118,0),
-				MatchingWord = rgb(85,85,85),
-				BuiltIn = rgb(132,214,247),
-				CurrentLine = rgb(45,50,65),
-				LocalMethod = rgb(253,251,172),
-				LocalProperty = rgb(97,161,241),
-				Nil = rgb(255,198,0),
-				Bool = rgb(255,198,0),
-				Function = rgb(248,109,124),
-				Local = rgb(248,109,124),
-				Self = rgb(248,109,124),
-				FunctionName = rgb(253,251,172),
-				Bracket = rgb(204,204,204)
-			},
-		},
-		Window = {
-			TitleOnMiddle = true,
-			Transparency = TransparencyWindow
-		}
-	}
-end)()
-
 
 local EmbeddedModules = {
 ["Console"] = function()
@@ -11767,7 +11689,83 @@ local Main, Explorer, Properties, ScriptViewer, Console, SaveInstance, ModelView
 local API, RMD
 
 -- Default Settings
-
+DefaultSettings = (function()
+	local rgb = Color3.fromRGB
+	return {
+		Explorer = {
+			_Recurse = true,
+			Sorting = true,
+			TeleportToOffset = Vector3.new(0,0,0),
+			ClickToRename = true,
+			AutoUpdateSearch = true,
+			AutoUpdateMode = 0, -- 0 Default, 1 no tree update, 2 no descendant events, 3 frozen
+			PartSelectionBox = true,
+			GuiSelectionBox = true,
+			CopyPathUseGetChildren = true
+		},
+		Properties = {
+			_Recurse = true,
+			MaxConflictCheck = 50,
+			ShowDeprecated = false,
+			ShowHidden = true,
+			ClearOnFocus = false,
+			LoadstringInput = true,
+			NumberRounding = 3,
+			ShowAttributes = false,
+			MaxAttributes = 50,
+			ScaleType = 1 -- 0 Full Name Shown, 1 Equal Halves
+		},
+		Theme = {
+			_Recurse = true,
+			Main1 = rgb(52,52,52),
+			Main2 = rgb(45,45,45),
+			Outline1 = rgb(33,33,33), -- Mainly frames
+			Outline2 = rgb(55,55,55), -- Mainly button
+			Outline3 = rgb(30,30,30), -- Mainly textbox
+			TextBox = rgb(38,38,38),
+			Menu = rgb(32,32,32),
+			ListSelection = rgb(11,90,175),
+			Button = rgb(60,60,60),
+			ButtonHover = rgb(68,68,68),
+			ButtonPress = rgb(40,40,40),
+			Highlight = rgb(75,75,75),
+			Text = rgb(255,255,255),
+			PlaceholderText = rgb(100,100,100),
+			Important = rgb(255,0,0),
+			ExplorerIconMap = "",
+			MiscIconMap = "",
+			Syntax = {
+				Text = rgb(204,204,204),
+				Background = rgb(36,36,36),
+				Selection = rgb(255,255,255),
+				SelectionBack = rgb(11,90,175),
+				Operator = rgb(204,204,204),
+				Number = rgb(255,198,0),
+				String = rgb(173,241,149),
+				Comment = rgb(102,102,102),
+				Keyword = rgb(248,109,124),
+				Error = rgb(255,0,0),
+				FindBackground = rgb(141,118,0),
+				MatchingWord = rgb(85,85,85),
+				BuiltIn = rgb(132,214,247),
+				CurrentLine = rgb(45,50,65),
+				LocalMethod = rgb(253,251,172),
+				LocalProperty = rgb(97,161,241),
+				Nil = rgb(255,198,0),
+				Bool = rgb(255,198,0),
+				Function = rgb(248,109,124),
+				Local = rgb(248,109,124),
+				Self = rgb(248,109,124),
+				FunctionName = rgb(253,251,172),
+				Bracket = rgb(204,204,204)
+			},
+		},
+		Window = {
+			TitleOnMiddle = true,
+			Transparency = TransparencyWindow
+		}
+	}
+end)()
 -- Vars
 local Settings = {}
 local Apps = {}

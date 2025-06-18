@@ -39,6 +39,8 @@ Note that very limited to no support will be provided.~~
 ## Credits
 .chill.z. (Dex++ Maintainer)
 
+[Cazan](https://github.com/Cazzanos) (Model Viewer)
+
 [Moon](https://github.com/LorekeeperZinnia/Dex) (Creator)
 
 [Toon](https://github.com/Toon-arch) (Click part to select)

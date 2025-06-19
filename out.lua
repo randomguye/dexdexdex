@@ -592,19 +592,19 @@ local function main()
 
 		local CtrlScroll = false
 
-		local LogService = cloneref(game:GetService("LogService"))
-		local Players = game:GetService("Players")
+		local LogService = service.LogService
+		local Players = service.Players
 		local LocalPlayer = Players.LocalPlayer
 		local Mouse = LocalPlayer:GetMouse()
-		local UserInputService = game:GetService("UserInputService")
-		local RunService = game:GetService("RunService")
+		local UserInputService = service.UserInputService
+		local RunService = service.RunService
 
 		local Console = ConsoleFrame
 		local SyntaxHighlightingModule = require(script.SyntaxHighlighter)
 		local OutputTextSize = Console.Output.OutputTextSize
 
 		local function Tween(obj, info, prop)
-			local tween = game:GetService("TweenService"):Create(obj, info, prop)
+			local tween = service.TweenService:Create(obj, info, prop)
 			tween:Play()
 			return tween
 		end
@@ -1342,14 +1342,14 @@ local function main()
 				local listOffsetX = startX - treeFrame.AbsolutePosition.X
 				local listOffsetY = startY - treeFrame.AbsolutePosition.Y
 
-				releaseEvent = game:GetService("UserInputService").InputEnded:Connect(function(input)
+				releaseEvent = service.UserInputService.InputEnded:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 then
 						releaseEvent:Disconnect()
 						mouseEvent:Disconnect()
 					end
 				end)
 
-				mouseEvent = game:GetService("UserInputService").InputChanged:Connect(function(input)
+				mouseEvent = service.UserInputService.InputChanged:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseMovement then
 						local deltaX = mouse.X - startX
 						local deltaY = mouse.Y - startY
@@ -4331,7 +4331,7 @@ local function main()
 
 					guiDragging = true
 
-					releaseEvent = game:GetService("UserInputService").InputEnded:Connect(function(input)
+					releaseEvent = service.UserInputService.InputEnded:Connect(function(input)
 						if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 							releaseEvent:Disconnect()
 							mouseEvent:Disconnect()
@@ -4344,7 +4344,7 @@ local function main()
 						end
 					end)
 
-					mouseEvent = game:GetService("UserInputService").InputChanged:Connect(function(input)
+					mouseEvent = service.UserInputService.InputChanged:Connect(function(input)
 						if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch and self.Draggable and not self.Closed then
 							if self.Aligned then
 								if leftSide.Resizing or rightSide.Resizing then return end
@@ -5772,7 +5772,7 @@ local function main()
 						end
 					end)
 
-					scrollEvent = game:GetService("RunService").RenderStepped:Connect(function()
+					scrollEvent = service.RunService.RenderStepped:Connect(function()
 						if scrollPowerV ~= 0 or scrollPowerH ~= 0 then
 							obj:ScrollDelta(scrollPowerH,scrollPowerV)
 							updateSelection()
@@ -7343,8 +7343,8 @@ local function main()
 			local greenInput = pickerFrame.Green.Input
 			local blueInput = pickerFrame.Blue.Input
 
-			local user = game:GetService("UserInputService")
-			local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+			local user = service.UserInputService
+			local mouse = service.Players.LocalPlayer:GetMouse()
 
 			local hue,sat,val = 0,0,1
 			local red,green,blue = 1,1,1
@@ -7727,8 +7727,8 @@ local function main()
 			local currentPoint = nil
 			local resetSequence = nil
 
-			local user = game:GetService("UserInputService")
-			local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+			local user = service.UserInputService
+			local mouse = service.Players.LocalPlayer:GetMouse()
 
 			for i = 2,10 do
 				local newLine = Instance.new("Frame")
@@ -8202,8 +8202,8 @@ local function main()
 			local closeButton = pickerFrame.Close
 			local topClose = pickerTopBar.Close
 
-			local user = game:GetService("UserInputService")
-			local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+			local user = service.UserInputService
+			local mouse = service.Players.LocalPlayer:GetMouse()
 
 			local colors = {{Color3.new(1,0,1),0},{Color3.new(0.2,0.9,0.2),0.2},{Color3.new(0.4,0.5,0.9),0.7},{Color3.new(0.6,1,1),1}}
 			local resetSequence = nil
@@ -8469,7 +8469,7 @@ local function main()
 	end)()
 
 	Lib.ViewportTextBox = (function()
-		local textService = game:GetService("TextService")
+		local textService = service.TextService
 
 		local props = {
 			OffsetX = 0,
@@ -8990,7 +8990,7 @@ local function main()
 		local hovering = false
 		local lastpos = Vector2.zero
 
-		local UIS = game:GetService("UserInputService")
+		local UIS = service.UserInputService
 
 		viewportFrame.InputBegan:Connect(function(input)
 			if not allowInput then return end
@@ -9035,7 +9035,7 @@ local function main()
 		end)
 
 		-- satu-satunya render loop
-		game:GetService("RunService").RenderStepped:Connect(function()
+		service.RunService.RenderStepped:Connect(function()
 			if camera and model then
 				if not dragging and autoRotate then
 					rotationY += rotationSpeed
@@ -11112,7 +11112,7 @@ end
 local function main()
 	local SaveInstance = {}
 	local window, ListFrame
-	local fileName = "Place_"..game.PlaceId.."_"..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.."_{TIMESTAMP}"
+	local fileName = "Place_"..game.PlaceId.."_"..service.MarketplaceService:GetProductInfo(game.PlaceId).Name.."_{TIMESTAMP}"
 	local Saving = false
 	
 	local SaveInstanceArgs = {
@@ -11446,7 +11446,7 @@ if identifyexecutor then
 	local name,ver = identifyexecutor()
 	executorName = name
 	executorVersion = ver
-elseif game:GetService("RunService"):IsStudio() then
+elseif service.RunService:IsStudio() then
 	executorName = "Studio"
 	executorVersion = version()
 end
@@ -11983,7 +11983,7 @@ Main = (function()
 		env.loadfile = loadfile
 		env.saveinstance = saveinstance or (function()
 			warn("No built-in saveinstance exists, using SynSaveInstance and wrapper...")
-			if game:GetService("RunService"):IsStudio() then return end
+			if service.RunService:IsStudio() then return end
 			local Params = {
 				RepoURL = "https://raw.githubusercontent.com/luau/SynSaveInstance/main/",
 				SSI = "saveinstance",
@@ -12807,7 +12807,7 @@ Main = (function()
 	end
 
 	Main.Init = function()
-		Main.Elevated = pcall(function() local a = game:GetService("CoreGui"):GetFullName() end)
+		Main.Elevated = pcall(function() local a = service.CoreGui:GetFullName() end)
 		Main.InitEnv()
 		Main.LoadSettings()
 		Main.SetupFilesystem()

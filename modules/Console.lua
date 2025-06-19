@@ -547,19 +547,19 @@ local function main()
 			
 			local CtrlScroll = false
 
-			local LogService = game:GetService("LogService")
-			local Players = game:GetService("Players")
+			local LogService = service.LogService
+			local Players = service.Players
 			local LocalPlayer = Players.LocalPlayer
 			local Mouse = LocalPlayer:GetMouse()
-			local UserInputService = game:GetService("UserInputService")
-			local RunService = game:GetService("RunService")
+			local UserInputService = service.UserInputService
+			local RunService = service.RunService
 
 			local Console = ConsoleFrame
 			local SyntaxHighlightingModule = require(script.SyntaxHighlighter)
 			local OutputTextSize = Console.Output.OutputTextSize
 
 			local function Tween(obj, info, prop)
-				local tween = game:GetService("TweenService"):Create(obj, info, prop)
+				local tween = service.TweenService:Create(obj, info, prop)
 				tween:Play()
 				return tween
 			end

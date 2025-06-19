@@ -568,14 +568,14 @@ local function main()
 				local listOffsetX = startX - treeFrame.AbsolutePosition.X
 				local listOffsetY = startY - treeFrame.AbsolutePosition.Y
 
-				releaseEvent = game:GetService("UserInputService").InputEnded:Connect(function(input)
+				releaseEvent = service.UserInputService.InputEnded:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 then
 						releaseEvent:Disconnect()
 						mouseEvent:Disconnect()
 					end
 				end)
 
-				mouseEvent = game:GetService("UserInputService").InputChanged:Connect(function(input)
+				mouseEvent = service.UserInputService.InputChanged:Connect(function(input)
 					if input.UserInputType == Enum.UserInputType.MouseMovement then
 						local deltaX = mouse.X - startX
 						local deltaY = mouse.Y - startY

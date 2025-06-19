@@ -37,7 +37,7 @@ if identifyexecutor then
 	local name,ver = identifyexecutor()
 	executorName = name
 	executorVersion = ver
-elseif game:GetService("RunService"):IsStudio() then
+elseif service.RunService:IsStudio() then
 	executorName = "Studio"
 	executorVersion = version()
 end

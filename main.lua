@@ -1040,7 +1040,7 @@ Main = (function()
 	end
 
 	Main.Init = function()
-		Main.Elevated = pcall(function() local a = game:GetService("CoreGui"):GetFullName() end)
+		Main.Elevated = pcall(function() local a = service.CoreGui:GetFullName() end)
 		Main.InitEnv()
 		Main.LoadSettings()
 		Main.SetupFilesystem()

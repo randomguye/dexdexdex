@@ -12,20 +12,6 @@ local TransparencyWindow = 0.1
 
 local nodes = {}
 local selection
-local cloneref = cloneref or function(...) return ... end
-
-local service = setmetatable({}, {
-	__index = function(self, name)
-		self[name] = cloneref(game:GetService(name))
-		return self[name]
-	end
-})
-
--- prevent environment implosion from references
--- mainly from the executor not having some game properties in their game variable
--- so we gotta use vanilla game
-local oldgame = game
-local game = workspace.Parent
 
 local EmbeddedModules = {
 ["Console"] = function()

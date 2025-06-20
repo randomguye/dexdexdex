@@ -1354,22 +1354,13 @@ local function main()
 				local listOffsetY = startY - treeFrame.AbsolutePosition.Y
 
 				releaseEvent = service.UserInputService.InputEnded:Connect(function(input)
-<<<<<<< HEAD
-					if input.UserInputType == Enum.UserInputType.MouseButton1 then
-=======
 					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
->>>>>>> bc209883b2fc7152218465b8cf1ba5801f3ec106
 						releaseEvent:Disconnect()
 						mouseEvent:Disconnect()
 					end
 				end)
 
 				mouseEvent = service.UserInputService.InputChanged:Connect(function(input)
-<<<<<<< HEAD
-					if input.UserInputType == Enum.UserInputType.MouseMovement then
-						local deltaX = mouse.X - startX
-						local deltaY = mouse.Y - startY
-=======
 					if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 						local currentX, currentY
 
@@ -1383,7 +1374,6 @@ local function main()
 
 						local deltaX = currentX - startX
 						local deltaY = currentY - startY
->>>>>>> bc209883b2fc7152218465b8cf1ba5801f3ec106
 						local dist = math.sqrt(deltaX^2 + deltaY^2)
 
 						if dist > 5 then
@@ -4624,29 +4614,6 @@ local function main()
 
 						guiDragging = true
 
-<<<<<<< HEAD
-					releaseEvent = service.UserInputService.InputEnded:Connect(function(input)
-						if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-							releaseEvent:Disconnect()
-							mouseEvent:Disconnect()
-							guiDragging = false
-							alignIndicator.Parent = nil
-							if alignInsertSide then
-								local targetSide = (alignInsertSide == "left" and leftSide) or (alignInsertSide == "right" and rightSide)
-								self:AlignTo(targetSide,alignInsertPos)
-							end
-						end
-					end)
-
-					mouseEvent = service.UserInputService.InputChanged:Connect(function(input)
-						if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch and self.Draggable and not self.Closed then
-							if self.Aligned then
-								if leftSide.Resizing or rightSide.Resizing then return end
-								local posX,posY = input.Position.X-offX,input.Position.Y-offY
-								local delta = math.sqrt((posX-initX)^2 + (posY-initY)^2)
-								if delta >= 5 then
-									self:SetAligned(false)
-=======
 						releaseEvent = service.UserInputService.InputEnded:Connect(function(input)
 							if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 								releaseEvent:Disconnect()
@@ -4656,7 +4623,6 @@ local function main()
 								if alignInsertSide then
 									local targetSide = (alignInsertSide == "left" and leftSide) or (alignInsertSide == "right" and rightSide)
 									self:AlignTo(targetSide, alignInsertPos)
->>>>>>> bc209883b2fc7152218465b8cf1ba5801f3ec106
 								end
 							end
 						end)
@@ -9434,12 +9400,7 @@ local function main()
 			end
 		end)
 
-<<<<<<< HEAD
-		-- satu-satunya render loop
-		service.RunService.RenderStepped:Connect(function()
-=======
 		game:GetService("RunService").RenderStepped:Connect(function()
->>>>>>> bc209883b2fc7152218465b8cf1ba5801f3ec106
 			if camera and model then
 				if not dragging and ModelViewer.AutoRotate then
 					rotationY += ModelViewer.RotationSpeed

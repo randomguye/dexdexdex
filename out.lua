@@ -11,11 +11,8 @@
 local selection
 local nodes = {}
 
-<<<<<<< HEAD
-=======
 local oldgame = game
 local game = workspace.Parent
->>>>>>> bc209883b2fc7152218465b8cf1ba5801f3ec106
 local EmbeddedModules = {
 ["Console"] = function()
 --[[

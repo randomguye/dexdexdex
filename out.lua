@@ -9234,7 +9234,7 @@ local function getPath(obj)
 end
 
 local function main()
-	local RunService = game:GetService("RunService")
+	local RunService = service.RunService
 	
 	local ModelViewer = {
 		EnableInputCamera = true,
@@ -9400,7 +9400,7 @@ local function main()
 			end
 		end)
 
-		game:GetService("RunService").RenderStepped:Connect(function()
+		service.RunService.RenderStepped:Connect(function()
 			if camera and model then
 				if not dragging and ModelViewer.AutoRotate then
 					rotationY += ModelViewer.RotationSpeed
